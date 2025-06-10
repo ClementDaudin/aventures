@@ -1,0 +1,104 @@
+{
+  "Actor": {
+    "types": ["aventurier"],
+    "htmlFields": ["biography"],
+    "aventurier": {
+      "biography": "",
+      "race": "",
+      "class": "",
+      "element": "",
+      "theme": "",
+      "age": "",
+      "languages": "",
+      "vocation": "",
+      "level":0,
+      "credits": 0,
+      "attributes": {
+        "strength": {
+          "base": 1,
+          "power": 0,
+          "sharpness": 0
+        },
+        "social": {
+          "base": 1,
+          "aura": 0,
+          "relationship": 0
+        },
+        "mental": {
+          "base": 1,
+          "instinct": 0,
+          "knowledge": 0
+        }
+      },
+      "hp": {
+        "value": 0,
+        "max": 0
+      },
+      "psychic": {
+        "value": 0,
+        "max": 0
+      },
+      "basic_posture": "Aucune",
+      "dice": {
+        "adventure": 2,
+        "misadventure": 2,
+      "advantage": false,
+      "disadvantage": false
+      },
+      "equipment": {
+        "weapons": [
+        ],
+        "general": [
+          {
+            "name": "",
+            "quantity": 0
+          }
+        ],
+        "armor": [
+          {
+            "name": "",
+            "value": 0
+          }
+        ],
+        "other": []
+      },
+      "skills": [
+        {
+          "name":  "",
+          "skill": "Aucun",
+          "bonus": 0
+        }
+      ],
+      "gift": [
+        {
+          "name":  "",
+          "psy": 0,
+          "dice_quantity": 0,
+          "dice_type": "d?",
+          "bonus": 0
+        }
+      ],
+      "passives": {
+        "general": [
+          {
+            "name": "",
+            "description": ""
+          }
+        ],
+        "weapons_id": []
+      }
+    }
+  },
+  "Item": {
+    "types": ["arme"],
+    "htmlFields": ["description"],
+    "arme": {
+      "id": 0,
+      "description": "",
+      "type": "Aucun",
+      "dice_quantity": 0,
+      "dice_number": "d?",
+      "bonus": 0
+    }
+  }
+}

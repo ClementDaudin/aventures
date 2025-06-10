@@ -1,0 +1,36 @@
+.sheet {
+    min-width: min-content;
+}
+
+.main{
+    display: grid;
+}
+.sheet header.sheet-header {
+    align-self: center;
+    flex: 0;
+}
+
+.sheet-header-logo{
+    width: 100px;
+    border: none;
+}
+
+.character-info{
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-areas:
+    "name race class element"
+    "theme theme language language"
+    "vocation vocation vocation vocation";
+}
+
+.character-info .character-name      { grid-area: name; }
+.character-info .character-race     { grid-area: race; }
+.character-info .character-class   { grid-area: class; }
+.character-info .character-element  { grid-area: element; }
+.character-info .character-theme    { grid-area: theme; }
+.character-info .character-language   { grid-area: language; }
+.character-info .character-vocation { grid-area: vocation; }
+
+

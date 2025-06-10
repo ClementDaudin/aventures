@@ -1,0 +1,23 @@
+{
+  "id": "aventures",
+  "title" : "Aventures",
+  "description" : "Mode de jeu Aventures pour La Bonne Gachette",
+  "version": "0.1.0",
+  "compatibility": {
+    "minimum": "11",
+    "verified": "11"
+  },
+  "author": "Clément Daudin",
+  "scripts": [],
+  "esmodules": ["module/aventures.js"],
+  "styles": "css/aventures.css",
+  "packs": [],
+  "languages": [],
+  "gridDistance": 1.5,
+  "gridUnits": "m",
+  "primaryTokenAttribute": "",
+  "secondaryTokenAttribute": "",
+  "url": "",
+  "manifest": "",
+  "download": ""
+}
