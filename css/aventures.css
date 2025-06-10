@@ -33,4 +33,56 @@
 .character-info .character-languages   { grid-area: languages; }
 .character-info .character-vocation { grid-area: vocation; }
 
+.statistics-info{
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(2, 1fr);
+}
 
+.statistics-attributes{
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-areas:
+    "strength strength social social mental mental"
+    "strength-value strength-value social-value social-value mental-value mental-value"
+    "power sharpness aura relations instinct knowledge"
+    "power-value sharpness-value aura-value relations-value instinct-value knowledge-value"
+    "power-malus sharpness-malus aura-malus relations-malus instinct-malus knowledge-malus"
+    "bonus bonus bonus bonus bonus bonus";
+}
+
+.statistics-attributes >* {
+    border: 1px solid black;
+}
+
+.statistics-attributes .strength { grid-area: strength; }
+.statistics-attributes .social { grid-area: social; }
+.statistics-attributes .mental { grid-area: mental; }
+.statistics-attributes .bonus { grid-area: bonus; }
+.statistics-attributes .strength-value { grid-area: strength-value; }
+.statistics-attributes .social-value { grid-area: social-value; }
+.statistics-attributes .mental-value { grid-area: mental-value; }
+.statistics-attributes .power { grid-area: power; }
+.statistics-attributes .sharpness { grid-area: sharpness; }
+.statistics-attributes .aura { grid-area: aura; }
+.statistics-attributes .relations { grid-area: relations; }
+.statistics-attributes .instinct { grid-area: instinct; }
+.statistics-attributes .knowledge { grid-area: knowledge; }
+.statistics-attributes .power-value { grid-area: power-value; }
+.statistics-attributes .sharpness-value { grid-area: sharpness-value; }
+.statistics-attributes .aura-value { grid-area: aura-value; }
+.statistics-attributes .relations-value { grid-area: relations-value; }
+.statistics-attributes .instinct-value { grid-area: instinct-value; }
+.statistics-attributes .knowledge-value { grid-area: knowledge-value; }
+.statistics-attributes .power-malus { grid-area: power-malus; }
+.statistics-attributes .sharpness-malus { grid-area: sharpness-malus; }
+.statistics-attributes .aura-malus { grid-area: aura-malus; }
+.statistics-attributes .relations-malus { grid-area: relations-malus; }
+.statistics-attributes .instinct-malus { grid-area: instinct-malus; }
+.statistics-attributes .knowledge-malus { grid-area: knowledge-malus; }
+
+.attribute-name, .subattribute-name {
+    text-align: center;
+    justify-items: center;
+    background-color: white;
+}
