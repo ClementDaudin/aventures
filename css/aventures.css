@@ -21,7 +21,7 @@
     grid-template-columns: repeat(4, 1fr);
     grid-template-areas:
     "name race class element"
-    "theme theme language language"
+    "theme theme languages languages"
     "vocation vocation vocation vocation";
 }
 
@@ -30,7 +30,7 @@
 .character-info .character-class   { grid-area: class; }
 .character-info .character-element  { grid-area: element; }
 .character-info .character-theme    { grid-area: theme; }
-.character-info .character-language   { grid-area: language; }
+.character-info .character-languages   { grid-area: languages; }
 .character-info .character-vocation { grid-area: vocation; }
 
 

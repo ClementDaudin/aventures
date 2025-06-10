@@ -73,25 +73,32 @@
                 <div class="category"></div>
                 <div class="character-info">
                     <div class="character-name">
-                        <h2>{{actor.name}}</h2>
+                        <label class="input-label name">Nom :</label>
+                        <input type="text" name="system.name" value="{{actor.name}}" placeholder="Nom" />
                     </div>
                     <div class="character-race">
-                        <h2>{{systemData.race}}</h2>
+                        <label class="input-label race">Race :</label>
+                        <input type="text" name="system.race" title="@{race}" value="{{systemData.race}}" placeholder="Race">
                     </div>
                     <div class="character-class">
-                        <h2>{{systemData.class}}</h2>
+                        <label class="input-label class">Classe :</label>
+                        <input type="text" name="system.class" value="{{systemData.class}}" placeholder="Classe" />
                     </div>
                     <div class="character-element">
-                        <h2>{{systemData.element}}</h2>
+                        <label class="input-label element">Élément :</label>
+                        <input type="text" name="system.element" value="{{systemData.element}}" placeholder="Élément" />
                     </div>
                     <div class="character-theme">
-                        <h2>{{systemData.theme}}</h2>
+                        <label class="input-label theme">Thème :</label>
+                        <input type="text" name="system.theme" value="{{systemData.theme}}" placeholder="Thème" />
                     </div>
                     <div class="character-languages">
-                        <h2>{{systemData.languages}}</h2>
+                        <label class="input-label languages">Langues connues :</label>
+                        <input type="text" name="system.languages" value="{{systemData.languages}}" placeholder="Langues connues" />
                     </div>
                     <div class="character-vocation">
-                        <h2>{{systemData.vocation}}</h2>
+                        <label class="input-label vocation">Vocation :</label>
+                        <input type="text" name="system.vocation" value="{{systemData.vocation}}" placeholder="Vocation" />
                     </div>
                 </div>
             </div>
