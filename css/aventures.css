@@ -1,6 +1,14 @@
 .sheet {
     min-width: min-content;
 }
+.sheet-rolltemplate-aventures{
+    padding: 8px;
+    background: url(../assets/aventures-bg.jpg) no-repeat center center fixed;
+}
+
+.window-app .window-content{
+    padding: 0;
+}
 
 .main{
     display: grid;
@@ -11,7 +19,7 @@
 }
 
 .sheet-header-logo{
-    width: 100px;
+    max-width: 200px;
     border: none;
 }
 
@@ -85,4 +93,99 @@
     text-align: center;
     justify-items: center;
     background-color: white;
+}
+
+.attribute-value, .subattribute-value {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    justify-items: center;
+}
+
+.attribute-value .rollValue {
+    width: 30px;
+    text-align: center;
+}
+
+.subattribute-value .rollValue {
+    width: 10px;
+    text-align: center;
+}
+
+.attribute-value .roll-attribute, .subattribute-value .roll-attribute {
+    width: 25px;
+    height: 30px;
+    text-align: center;
+    padding: 2px;
+}
+
+.attribute-value .roll-attribute img, .subattribute-value .roll-attribute img{
+    border: none;
+}
+
+.subattribute-malus {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    justify-items: center;
+}
+
+.subattribute-malus > *{
+    appearance: none;
+    border: 2px solid;
+    background-color: white;
+    cursor: pointer;
+    position: relative;
+}
+
+.subattribute-malus .red_card {
+
+    border-left-color: darkred;     /* gauche */
+    border-top-color: darkred;      /* haut */
+    border-right-color: lightcoral; /* droite */
+    border-bottom-color: lightcoral;/* bas */
+
+}
+.subattribute-malus .yellow_card {
+    border-left-color: darkgoldenrod;
+    border-top-color: darkgoldenrod;
+    border-right-color: goldenrod;
+    border-bottom-color: goldenrod;
+}
+
+.subattribute-malus .red_card:checked::after, .subattribute-malus .yellow_card:checked::after {
+    content: "✔";
+    width: 16px;
+    height: 16px;
+    color: white;
+    background-color: var(--color-checkbox-checked);
+    font-size: 15px;
+    font-weight: bold;
+    position: absolute;
+    text-align: center;
+    line-height: 16px;
+}
+.bonus{
+    text-align: center;
+    display: flex;
+    place-content: center;
+    gap: 0.2rem;
+
+}
+.bonus .input-label{
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+
+}
+.bonus input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    margin-left: 0;
+
+}
+.bonus img {
+    width: 14px;
+    height: 14px;
+    border: none;
 }

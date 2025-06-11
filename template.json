@@ -16,18 +16,42 @@
       "attributes": {
         "strength": {
           "base": 1,
-          "power": 0,
-          "sharpness": 0
+          "power": {
+            "base": 0,
+            "yellow_card": false,
+            "red_card": false
+          },
+          "sharpness": {
+            "base": 0,
+            "yellow_card": false,
+            "red_card": false
+          }
         },
         "social": {
           "base": 1,
-          "aura": 0,
-          "relationship": 0
+          "aura": {
+            "base": 0,
+            "yellow_card": false,
+            "red_card": false
+          },
+          "relationship": {
+            "base": 0,
+            "yellow_card": false,
+            "red_card": false
+          }
         },
         "mental": {
           "base": 1,
-          "instinct": 0,
-          "knowledge": 0
+          "instinct": {
+            "base": 0,
+            "yellow_card": false,
+            "red_card": false
+          },
+          "knowledge": {
+            "base": 0,
+            "yellow_card": false,
+            "red_card": false
+          }
         }
       },
       "hp": {
@@ -42,8 +66,8 @@
       "dice": {
         "adventure": 2,
         "misadventure": 2,
-      "advantage": false,
-      "disadvantage": false
+        "advantage": false,
+        "disadvantage": false
       },
       "equipment": {
         "weapons": [

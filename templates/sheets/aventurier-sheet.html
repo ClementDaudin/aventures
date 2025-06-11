@@ -107,32 +107,86 @@
                 <div class="statistics-info">
                     <div class="statistics-attributes">
                         <div class="attribute-name strength">Physique</div>
-                        <div class="attribute-value strength-value"></div>
+                        <div class="attribute-value strength-value">
+                            <input type="text" class="rollValue" name="system.attributes.strength.base" value="{{systemData.attributes.strength.base}}" placeholder="" />
+                            <button class="roll-attribute" data-attribute="strength" data-dice="1d100" data-title="@{strength}" data-i18n="strength"><img src="systems/aventures/assets//dice.png"></button>
+                        </div>
                         <div class="subattribute-name power">Puissance</div>
-                        <div class="subattribute-value power-value"></div>
-                        <div class="subattribute-malus power-malus"></div>
+                        <div class="subattribute-value power-value">
+                            <input type="text" class="rollValue" name="system.attributes.strength.power.base" value="{{systemData.attributes.strength.power.base}}" placeholder="" />
+                            <button class="roll-attribute" data-attribute="power" data-dice="1d?" data-title="@{power}" data-i18n="power"><img src="systems/aventures/assets//dice.png"></button>
+                        </div>
+                        <div class="subattribute-malus power-malus">
+                            <input type="checkbox" class="yellow_card" value="system.attributes.strength.power.yellow_card" data-i18n="malus">
+                            <input type="checkbox" class="red_card" value="system.attributes.strength.power.red_card" data-i18n="malus">
+                        </div>
                         <div class="subattribute-name sharpness">Finesse</div>
-                        <div class="subattribute-value sharpness-value"></div>
-                        <div class="subattribute-malus sharpness-malus"></div>
+                        <div class="subattribute-value sharpness-value">
+                            <input type="text" class="rollValue" name="system.attributes.strength.sharpness.base" value="{{systemData.attributes.strength.sharpness.base}}" placeholder="" />
+                            <button class="roll-attribute" data-attribute="sharpness" data-dice="1d?" data-title="@{sharpness}" data-i18n="sharpness"><img src="systems/aventures/assets//dice.png"></button>
+                        </div>
+                        <div class="subattribute-malus sharpness-malus">
+                            <input type="checkbox" class="yellow_card" value="system.attributes.strength.sharpness.yellow_card" data-i18n="malus">
+                            <input type="checkbox" class="red_card" value="system.attributes.strength.sharpness.red_card" data-i18n="malus">
+                        </div>
 
                         <div class="attribute-name social">Social</div>
-                        <div class="attribute-value social-value"></div>
+                        <div class="attribute-value social-value">
+                            <input type="text" class="rollValue" name="system.attributes.social.base" value="{{systemData.attributes.social.base}}" placeholder="" />
+                            <button class="roll-attribute" data-attribute="social" data-dice="1d100" data-title="@{social}" data-i18n="social"><img src="systems/aventures/assets//dice.png"></button>
+                        </div>
                         <div class="subattribute-name aura">Aura</div>
-                        <div class="subattribute-value aura-value"></div>
-                        <div class="subattribute-malus aura-malus"></div>
+                        <div class="subattribute-value aura-value">
+                            <input type="text" class="rollValue" name="system.attributes.social.aura.base" value="{{systemData.attributes.social.aura.base}}" placeholder="" />
+                            <button class="roll-attribute" data-attribute="aura" data-dice="1d?" data-title="@{aura}" data-i18n="aura"><img src="systems/aventures/assets//dice.png"></button>
+                        </div>
+                        <div class="subattribute-malus aura-malus">
+                            <input type="checkbox" class="yellow_card" value="system.attributes.social.aura.yellow_card" data-i18n="malus">
+                            <input type="checkbox" class="red_card" value="system.attributes.social.aura.red_card" data-i18n="malus">
+                        </div>
                         <div class="subattribute-name relationship">Relations</div>
-                        <div class="subattribute-value relationship-value"></div>
-                        <div class="subattribute-malus relationship-malus"></div>
+                        <div class="subattribute-value relationship-value">
+                            <input type="text" class="rollValue" name="system.attributes.social.relationship.base" value="{{systemData.attributes.social.relationship.base}}" placeholder="" />
+                            <button class="roll-attribute" data-attribute="relationship" data-dice="1d?" data-title="@{relationship}" data-i18n="relationship"><img src="systems/aventures/assets//dice.png"></button>
+                        </div>
+                        <div class="subattribute-malus relationship-malus">
+                            <input type="checkbox" class="yellow_card" value="system.attributes.social.relationship.yellow_card" data-i18n="malus">
+                            <input type="checkbox" class="red_card" value="system.attributes.social.relationship.red_card" data-i18n="malus">
+
+                        </div>
 
                         <div class="attribute-name mental">Mental</div>
-                        <div class="attribute-value mental-value"></div>
+                        <div class="attribute-value mental-value">
+                            <input type="text" class="rollValue" name="system.attributes.mental.base" value="{{systemData.attributes.mental.base}}" placeholder="" />
+                            <button class="roll-attribute" data-attribute="mental" data-dice="1d100" data-title="@{mental}" data-i18n="mental"><img src="systems/aventures/assets//dice.png"></button>
+                        </div>
                         <div class="subattribute-name instinct">Instinct</div>
-                        <div class="subattribute-value instinct-value"></div>
-                        <div class="subattribute-malus instinct-malus"></div>
+                        <div class="subattribute-value instinct-value">
+                            <input type="text" class="rollValue" name="system.attributes.mental.instinct.base" value="{{systemData.attributes.mental.instinct.base}}" placeholder="" />
+                            <button class="roll-attribute" data-attribute="instinct" data-dice="1d?" data-title="@{instinct}" data-i18n="instinct"><img src="systems/aventures/assets//dice.png"></button>
+                        </div>
+                        <div class="subattribute-malus instinct-malus">
+                            <input type="checkbox" class="yellow_card" value="system.attributes.mental.instinct.yellow_card" data-i18n="malus">
+                            <input type="checkbox" class="red_card" value="system.attributes.mental.instinct.red_card" data-i18n="malus">
+                        </div>
                         <div class="subattribute-name knowledge">Savoir</div>
-                        <div class="subattribute-value knowledge-value"></div>
-                        <div class="subattribute-malus knowledge-malus"></div>
-                        <div class="statistics-attributes-row bonus"></div>
+                        <div class="subattribute-value knowledge-value">
+                            <input type="text" class="rollValue" name="system.attributes.mental.knowledge.base" value="{{systemData.attributes.mental.knowledge.base}}" placeholder="" />
+                            <button class="roll-attribute" data-attribute="knowledge" data-dice="1d?" data-title="@{knowledge}" data-i18n="knowledge"><img src="systems/aventures/assets//dice.png"></button>
+                        </div>
+                        <div class="subattribute-malus knowledge-malus">
+                            <input type="checkbox" class="yellow_card" value="system.attributes.mental.knowledge.yellow_card" data-i18n="malus">
+                            <input type="checkbox" class="red_card" value="system.attributes.mental.knowledge.red_card" data-i18n="malus">
+                        </div>
+                        <div class="statistics-attributes-row bonus">
+                            <label class="input-label">Avantage<img src="systems/aventures/assets/advantage.png">
+                            <input type="checkbox" value="system.attributes.dice.advantage" data-i18n="Avantage">
+                            </label>
+                            |
+                            <label class="input-label"> Désavantage <img src="systems/aventures/assets/disadvantage.png">
+                            <input type="checkbox" value="system.attributes.dice.disadvantage" data-i18n="Avantage">
+                            </label>
+                        </div>
                     </div>
                     <div class="character-statistics">
                         <div class="character-statistics-row">
