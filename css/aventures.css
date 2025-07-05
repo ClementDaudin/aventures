@@ -4,6 +4,11 @@
 .sheet-rolltemplate-aventures{
     padding: 8px;
     background: url(../assets/aventures-bg.jpg) no-repeat center center fixed;
+    color: #333;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.42857143;
+    background-color: #fff;
 }
 
 .window-app .window-content{
@@ -56,7 +61,7 @@
 .statistics-info{
     display: grid;
     gap: 1rem;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, auto);
 }
 
 .statistics-attributes{
@@ -68,9 +73,12 @@
     "power sharpness aura relations instinct knowledge"
     "power-value sharpness-value aura-value relations-value instinct-value knowledge-value"
     "power-malus sharpness-malus aura-malus relations-malus instinct-malus knowledge-malus"
+    "race-passive race-passive race-passive race-passive race-passive race-passive"
+    "class-passive class-passive class-passive class-passive class-passive class-passive"
+    "persona-passive persona-passive persona-passive persona-passive persona-passive persona-passive"
     "bonus bonus bonus bonus bonus bonus";
-    height: 200px;
-    width: 500px;
+    height: 400px;
+    min-width: 500px;
 }
 
 .statistics-attributes >* {
@@ -104,7 +112,10 @@
 .statistics-attributes .aura-malus { grid-area: aura-malus; }
 .statistics-attributes .relations-malus { grid-area: relations-malus; }
 .statistics-attributes .instinct-malus { grid-area: instinct-malus; }
+.statistics-attributes .race-passive { grid-area: race-passive; }
 .statistics-attributes .knowledge-malus { grid-area: knowledge-malus; }
+.statistics-attributes .class-passive { grid-area: class-passive; }
+.statistics-attributes .persona-passive { grid-area: persona-passive; }
 
 .attribute-name, .subattribute-name {
     text-align: center;
@@ -128,14 +139,15 @@
     text-align: center;
 }
 
-.attribute-value .roll-attribute, .subattribute-value .roll-attribute {
+.attribute-value .roll-attribute, .subattribute-value .roll-attribute, .roll-skill , .roll-gift, .item-delete {
     width: 25px;
     height: 30px;
     text-align: center;
     padding: 2px;
+    margin: 2px 0;
 }
 
-.attribute-value .roll-attribute img, .subattribute-value .roll-attribute img{
+img{
     border: none;
 }
 
@@ -209,17 +221,21 @@
 .character-statistics{
     display: grid;
     grid-template-rows: repeat(6, 1fr);
+    max-width: 400px;
+    min-width: 230px;
 
 }
 
 .character-statistics{
     border-left: 1px solid black;
     border-top: 1px solid black;
+    text-align: center;
 }
 
 .character-statistics-row > *{
     border-right: 1px solid black;
     border-bottom: 1px solid black;
+    align-items: center;
 }
 
 .character-statistics-row{
@@ -231,6 +247,12 @@
 .label-element{
     background-color: rgba(255, 255, 255, 0.5);
 
+}
+
+.character-statistics-name{
+    display: grid;
+    font-size: 16px;
+    font-weight: bold;
 }
 
 .character-statistics-value{
@@ -251,4 +273,81 @@
 .max-stat-input{
     color: #b74437 !important;
 
+}
+
+.statistics-tab{
+    display: flex;
+    overflow: hidden;
+    border-bottom: 5px solid black;
+    border-top: 5px solid black;
+    background-color: transparent;
+}
+
+.statistics-tab button{
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    width: fit-content;
+}
+
+.skills-info{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.skills-list-row, .gift-list-row{
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.skills-list-row .skill-name, .gift-list-row .gift-name{
+    width: 40%;
+}
+
+.skill-type{
+    width: 30%;
+}
+
+.skills-list-row .skill-bonus, .gift-list-row .gift-bonus{
+    width: 3%;
+}
+
+textarea{
+    font-size: 11px;
+    resize: none;
+    font-weight: normal;
+    font-family: inherit;
+    border: none;
+}
+.passive{
+    display: flex;
+}
+
+.passive label{
+    width: 25%;
+    text-align: center;
+}
+.gift-list-row .gift-psy{
+    width: 7%;
+}
+.gift-list-row .gift-dice-quantity{
+    width: 7%;
+}
+.gift-list-row .gift-dice-type{
+    width: 15%;
+}
+
+.manage-list-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.manage-list-row button{
+    width: fit-content;
 }

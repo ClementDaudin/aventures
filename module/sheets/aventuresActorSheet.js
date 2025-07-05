@@ -18,6 +18,15 @@ export default class aventuresActorSheet extends ActorSheet {
             secrets: this.document.isOwner,
             async: true
         });
+        if(sessionStorage.getItem("launchFoundry")){
+            this.data.systemData.updateSkillsMode = false;
+            this.data.systemData.updateGiftMode = false;
+            await this.actor.update({
+                "system.updateSkillsMode": false,
+                "system.updateGiftMode": false
+            });
+            sessionStorage.removeItem("launchFoundry");
+        }
         console.log(this.data);
         return this.data;
     }
@@ -51,5 +60,64 @@ export default class aventuresActorSheet extends ActorSheet {
                     html.find("#presentation")[0].checked = true;
                     break;
             }*/
+
+        html.find(".switchModeButton").click(async ev => {
+            const value = ev.currentTarget.dataset.value;
+            const parameter = ev.currentTarget.dataset.parameter;
+            await this.actor.update({
+                [`system.${parameter}`]: value === "true"
+            });
+            this.render();
+        })
+
+        html.find(".add-button").click(async ev => {
+            this.addToList(ev.currentTarget.dataset.key);
+        });
+
+        html.find(".item-delete").click(async ev => {
+            const key = ev.currentTarget.dataset.key;
+            const parameter = ev.currentTarget.dataset.parameter;
+            await this.actor.update({
+                [`system.${parameter}.-=${key}`]: null
+            });
+            this.render();
+        })
+        html.find(".yellow_card").click(async ev => {
+            const attribute = ev.currentTarget.value
+            await this.actor.update({
+                [`${attribute}`]: true
+            })
+        })
+    }
+
+    addToList(type) {
+        const newKey = randomID();
+        if (type === "skill") {
+            let skills = foundry.utils.deepClone(this.data.systemData.skills);
+            skills[newKey] = {
+                name: "",
+                skill: "Aucun",
+                bonus: 0
+            };
+            this.actor.update({
+                "system.skills": skills
+            });
+        }
+        else{
+            let gift = foundry.utils.deepClone(this.data.systemData.gift);
+            gift[newKey] = {name: "", psy: 0, dice_quantity: 0, dice_type: "d?", bonus: 0};
+            this.actor.update({
+                "system.gift": gift
+            })
+        }
+    }
+
+    async close(options = {}){
+        this.actor.update({
+            "system.updateSkillsMode": false,
+            "system.updateGiftMode": false
+        });
+        return super.close(options);
     }
 }
+
