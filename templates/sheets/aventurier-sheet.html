@@ -1,4 +1,5 @@
 <form class="flexcol {{cssClass}} sheet-rolltemplate-aventures" autocomplete="off">
+    <link href="https://fonts.googleapis.com/css2?family=Obra+Letra&display=swap" rel="stylesheet">
     <header class="sheet-header">
         <img class="sheet-header-logo" src="systems/aventures/assets/aventures-logo.png" alt="logo">
        <!-- <div id="ma_popup" class="popup" style="display: none">-->
@@ -148,11 +149,11 @@
                         </div>
                         <div class="statistics-attributes-row bonus">
                             <label class="input-label">Avantage<img src="systems/aventures/assets/advantage.png">
-                            <input type="checkbox" name="system.dice.advantage" {{checked systemData.dice.advantage}} data-i18n="Avantage">
+                            <input type="checkbox" class="updateBonus" data-attribute="advantage" name="system.dice.advantage" {{checked systemData.dice.advantage}} data-i18n="Avantage">
                             </label>
                             |
                             <label class="input-label"> Désavantage <img src="systems/aventures/assets/disadvantage.png">
-                            <input type="checkbox" name="system.dice.disadvantage" {{checked systemData.dice.disadvantage}} data-i18n="Avantage">
+                            <input type="checkbox" class="updateBonus" data-attribute="disadvantage" name="system.dice.disadvantage" {{checked systemData.dice.disadvantage}} data-i18n="Avantage">
                             </label>
                         </div>
                     </div>
@@ -166,7 +167,7 @@
                         <div class="character-statistics-row">
                             <div class="character-statistics-name">Santé</div>
                             <div class="character-statistics-value">
-                                <input type=number class="basic-text-input" name="system.hp.value" value="{{systemData.hp.value}}" placeholder="0" />
+                                <input type=number class="basic-text-input" id="hp" name="system.hp.value" value="{{systemData.hp.value}}" placeholder="0" />
                                 /
                                 <input type=number class="basic-text-input max-stat-input" name="system.hp.max" value="{{systemData.hp.max}}" placeholder="0" />
                             </div>
@@ -185,7 +186,7 @@
                                 <select name="system.basic_posture" title="@{posture}" id="posture">
                                     <option value="aucune" data-i18n="aucune" {{#if (eq systemData.basic_posture "aucune")}}selected{{/if}}>Aucune</option>
                                     <option value="offensif" data-i18n="offensif" {{#if (eq systemData.basic_posture "offensif")}}selected{{/if}}>Offensif</option>
-                                    <option value="défensif" data-i18n="défensif" {{#if (eq systemData.basic_posture "défensif")}}selected{{/if}}>Défensif</option>
+                                    <option value="defensif" data-i18n="défensif" {{#if (eq systemData.basic_posture "defensif")}}selected{{/if}}>Défensif</option>
                                     <option value="focus" data-i18n="focus" {{#if (eq systemData.basic_posture "focus")}}selected{{/if}}>Focus</option>
                                 </select>
                             </div>

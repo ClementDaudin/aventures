@@ -135,6 +135,35 @@ export default class aventuresActorSheet extends ActorSheet {
             const diceType = ev.currentTarget.dataset.title;
             this.rollDice(diceToRoll, diceStat, diceType);
         });
+
+        html.find(".updateBonus").click(async ev => {
+            const checked = ev.currentTarget.checked;
+            const attribute = ev.currentTarget.dataset.attribute;
+            const token = this.actor.getActiveTokens()[0];
+            await token.toggleEffect(`systems/aventures/assets/icons/${attribute}.png`, { active: checked });
+
+        })
+
+        html.find("#posture").change(async ev => {
+            const selected = ev.currentTarget.value;
+            const token = this.actor.getActiveTokens()[0];
+            await token.toggleEffect(`systems/aventures/assets/icons/defensif.png`, { active: false });
+            await token.toggleEffect(`systems/aventures/assets/icons/offensif.png`, { active: false });
+            await token.toggleEffect(`systems/aventures/assets/icons/focus.png`, { active: false });
+            if(selected !== "aucune"){
+                await token.toggleEffect(`systems/aventures/assets/icons/${selected}.png`, { active: true });
+            }
+        })
+        html.find("#hp").change(async ev => {
+            const token = this.actor.getActiveTokens()[0];
+            if ( ev.currentTarget.value <= 0) {
+                await token.document.update({tint: "#3a3939"});
+                await token.toggleEffect(`icons/svg/skull.svg`, {active: true});
+            }else{
+                await token.document.update({tint: null});
+                await token.toggleEffect(`icons/svg/skull.svg`, {active: false});
+            }
+        });
     }
 
     addToList(type) {
@@ -190,16 +219,130 @@ export default class aventuresActorSheet extends ActorSheet {
     }
 
     async rollDice(diceToRoll, diceStat, diceType) {
-        diceStat = Math.min(diceStat, 95);
-        let roll = new Roll(diceToRoll);
-        await roll.evaluate();
-        let result = roll.total;
-        let messageContent = `<div>${this.actor.name} effectue un jet de ${diceType} ! ${result} vs ${diceStat}</div>`;
-        ChatMessage.create({
-            speaker: ChatMessage.getSpeaker({actor: this.actor}),
-            content: messageContent,
-        });
-    }
+        const hideDieSelect = diceToRoll === "1d?";
 
+        new Dialog({
+            title: "Jet personnalisé",
+            content: `
+      <form>
+        <div class="form-group" style="${hideDieSelect ? '' : 'display:none;'}">
+          <label for="die">Type de dé</label>
+          <select id="die" name="die">
+            <option value="6" selected>d6</option>
+            <option value="8">d8</option>
+            <option value="10">d10</option>
+            <option value="12">d12</option>
+            <option value="20">d20</option>
+          </select>
+        </div>
+        <div class="form-group" style="${hideDieSelect ? 'display:none;' : ''}">
+          <label for="modifier">Bonus / Malus</label>
+          <input type="number" id="modifier" name="modifier" value="0"/>
+        </div>
+      </form>
+    `,
+            buttons: {
+                roll: {
+                    label: "Lancer",
+                    callback: html => {
+                        let formula = diceToRoll;
+                        const modifier = parseInt(html.find('[name="modifier"]').val()) || 0;
+                        diceStat = Math.min( Number(diceStat) + modifier, 95);
+                        let max=100;
+
+                        if(hideDieSelect){
+                            const die = html.find('[name="die"]').val();
+                            formula = `1d${die}`;
+                            max = die;
+                        }
+
+                        const roll = new Roll(formula);
+                        roll.roll({async: true}).then(r => {
+                            let result = roll.total;
+                            const seuilVert = Math.max(1/max, Math.ceil(0.05 * max))
+                            const seuilRouge = Math.min(max, 95)
+                            const rightOffset = diceStat < 10 ? "18px" : "12px";
+                            const playerColor = game.user.color;
+                            console.log(playerColor)
+                            let color = "#3e2d17";
+                            if (result <= seuilVert) {
+                                color = "green";
+                            } else if (result >= seuilRouge) {
+                                color = "red";
+                            }
+                            const tokenImg = this.actor.token?.texture?.src ?? this.actor.img ?? "icons/svg/mystery-man.svg";
+                            const messageContent =
+                                          `<div style="
+                                              font-family: 'Obra Letra', sans-serif;
+                                              text-align: center;
+                                              color: #3e2d17;
+                                              position: relative;
+                                              user-select: none;
+                                              height: 170px;
+                                           ">
+                                                <img src="/systems/aventures/assets/roll-card-aventure.png" 
+                                                    style="
+                                                        position: absolute;
+                                                        top: 0;
+                                                        left: 0;
+                                                        width: 100%;
+                                                        height: 100%;
+                                                        image-rendering: crisp-edges;
+                                                        z-index: 0;
+                                                        pointer-events: none;
+                                              " />
+                                              <div style="
+                                                position: absolute;
+                                                top: 2px;
+                                                right: 10px;
+                                                width: 25px;
+                                                height: 39px;
+                                                background-color: ${playerColor};
+                                                clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%);
+                                                box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                                              "></div>
+                                              <img src="${tokenImg}" style="
+                                                    position: absolute;
+                                                    top: 4px;
+                                                    right: 10px;
+                                                    width: 25px;
+                                                    height: 25px;
+                                                    object-fit: cover;
+                                                    z-index: 2;
+                                                  ">
+                                             <div style="position: relative; z-index: 1; padding-top: 8px;">
+                                                <div style="font-weight: 600; font-size: 1.5em; margin-bottom: 10px; letter-spacing: 0.05em">
+                                                  Jet de <br/>${diceType}
+                                                </div>
+                                                <div style="font-size: 4em; font-weight: 900; letter-spacing: 0.15em; color: ${color};">
+                                                  ${result}
+                                                </div>
+                                                <div style="
+                                                  position: absolute;
+                                                  top: 115px;
+                                                  right: ${rightOffset};
+                                                  font-size: 25px;
+                                                  z-index: 2;
+                                                  color: #e6dab9;
+                                                ">
+                                                  ${diceStat}
+                                                </div>
+                                             </div>
+                                        </div>`;
+                            AudioHelper.play({src: CONFIG.sounds.dice, volume: 0.8, autoplay: true, loop: false}, true);
+                            ChatMessage.create({
+                                speaker: ChatMessage.getSpeaker({actor: this.actor}),
+                                content: messageContent,
+                            });
+                        });
+                    }
+                },
+                cancel: {
+                    label: "Annuler"
+                }
+            },
+            default: "roll"
+        }).render(true);
+    }
 }
 

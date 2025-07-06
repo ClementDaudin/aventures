@@ -13,6 +13,39 @@ Hooks.once("init", () => {
 
     sessionStorage.setItem("launchFoundry", "true");
 
+    CONFIG.statusEffects.push(
+        {
+            id: "advantage",
+            label: "Avantage",
+            icon: "systems/aventures/assets/icons/advantage.png",
+            flags: { core: { statusId: "advantage" } }
+        },
+        {
+            id: "disadvantage",
+            label: "Désavantage",
+            icon: "systems/aventures/assets/icons/disadvantage.png",
+            flags: { core: { statusId: "disadvantage" } }
+        },
+        {
+            id: "focus",
+            label: "focus",
+            icon: "systems/aventures/assets/icons/focus.png",
+            flags: { core: { statusId: "focus" } }
+        },
+        {
+            id: "offensif",
+            label: "Offensif",
+            icon: "systems/aventures/assets/icons/offensif.png",
+            flags: { core: { statusId: "offensif" } }
+        },
+        {
+            id: "defensif",
+            label: "Défensif",
+            icon: "systems/aventures/assets/icons/defensif.png",
+            flags: { core: { statusId: "defensif" } }
+        }
+    );
+
 })
 // Restaurer la position de défilement avec un délai
 Hooks.on('updateActor', (actor, updateData, options, userId) => {
@@ -42,6 +75,27 @@ Hooks.on("createItem", async (item, itemData) => {
         return true;
     }*/
 });
+
+Hooks.on("createToken", async (tokenDoc, options, userId) => {
+    const token = tokenDoc.object;
+    if (token.actor.data.data.dice.advantage) {
+        await token.toggleEffect("systems/aventures/assets/icons/advantage.png", { active: true });
+
+    }
+    if (token.actor.data.data.dice.disadvantage) {
+        await token.toggleEffect("systems/aventures/assets/icons/disadvantage.png", { active: true });
+    }
+    const posture = token.actor.data.data.basic_posture;
+    if (posture !== "aucune") {
+        await token.toggleEffect(`systems/aventures/assets/icons/${posture}.png`, { active: true });
+    }
+
+    if(token.actor.data.data.hp.value<=0){
+        await token.document.update({ tint: "#3a3939" });
+        await token.toggleEffect(`icons/svg/skull.svg`, { active: true });
+    }
+});
+
 
 Handlebars.registerHelper('add', function(a, b) {
     return Number(a) + Number(b);
