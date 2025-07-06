@@ -139,7 +139,7 @@
     text-align: center;
 }
 
-.attribute-value .roll-attribute, .subattribute-value .roll-attribute, .roll-skill , .roll-gift, .item-delete {
+.roll-dice, .item-delete {
     width: 25px;
     height: 30px;
     text-align: center;
@@ -221,7 +221,6 @@ img{
 .character-statistics{
     display: grid;
     grid-template-rows: repeat(6, 1fr);
-    max-width: 400px;
     min-width: 230px;
 
 }
@@ -300,7 +299,7 @@ img{
     gap: 1rem;
 }
 
-.skills-list-row, .gift-list-row{
+.skills-list-row, .gift-list-row, .equipment-list-row, .armor-list-row{
     display: flex;
     gap: 0.5rem;
     align-items: center;
@@ -308,6 +307,12 @@ img{
 
 .skills-list-row .skill-name, .gift-list-row .gift-name{
     width: 40%;
+}
+.equipment-list-row .equipment-name, .armor-list-row .armor-name{
+    width: -webkit-fill-available;
+}
+.equipment-list-row .equipment-quantity, .armor-list-row .armor-value{
+    width: 10%;
 }
 
 .skill-type{
@@ -350,4 +355,13 @@ textarea{
 }
 .manage-list-row button{
     width: fit-content;
+}
+#equipment_component{
+    display: none;
+}
+.equipment_structure{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, auto);
+    gap: 0.5rem;
 }

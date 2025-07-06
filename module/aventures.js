@@ -11,6 +11,8 @@ Hooks.once("init", () => {
     Actors.unregisterSheet("core", ActorSheet);
     Actors.registerSheet("aventures", aventuresActorSheet, {makeDefault: true});
 
+    sessionStorage.setItem("launchFoundry", "true");
+
 })
 // Restaurer la position de défilement avec un délai
 Hooks.on('updateActor', (actor, updateData, options, userId) => {
@@ -39,4 +41,13 @@ Hooks.on("createItem", async (item, itemData) => {
         }
         return true;
     }*/
+});
+
+Handlebars.registerHelper('add', function(a, b) {
+    return Number(a) + Number(b);
+});
+
+Handlebars.registerHelper('lookup', function (obj, field) {
+    console.log(obj, field);
+    return obj?.[field];
 });

@@ -5,67 +5,63 @@
     "aventurier": {
       "biography": "",
       "race": "",
+      "raceDescription": "",
+      "classDescription": "",
+      "personalDescription": "",
       "class": "",
       "element": "",
       "theme": "",
       "age": "",
       "languages": "",
       "vocation": "",
-      "level":0,
       "credits": 0,
       "attributes": {
         "strength": {
-          "base": 1,
+          "label": "Physique",
           "power": {
-            "base": 0,
+            "label": "Puissance",
             "yellow_card": false,
             "red_card": false
           },
           "sharpness": {
-            "base": 0,
+            "label": "Finesse",
             "yellow_card": false,
             "red_card": false
           }
         },
         "social": {
-          "base": 1,
+          "label": "Social",
           "aura": {
-            "base": 0,
+            "label": "Aura",
             "yellow_card": false,
             "red_card": false
           },
           "relationship": {
-            "base": 0,
+            "label": "Relations",
             "yellow_card": false,
             "red_card": false
           }
         },
         "mental": {
-          "base": 1,
+          "label": "Mental",
           "instinct": {
-            "base": 0,
+            "label": "Instinct",
             "yellow_card": false,
             "red_card": false
           },
           "knowledge": {
-            "base": 0,
+            "label": "Savoir",
             "yellow_card": false,
             "red_card": false
           }
         }
       },
       "hp": {
-        "value": 0,
-        "max": 0
       },
       "psychic": {
-        "value": 0,
-        "max": 0
       },
-      "basic_posture": "Aucune",
+      "basic_posture": "aucune",
       "dice": {
-        "adventure": 2,
-        "misadventure": 2,
         "advantage": false,
         "disadvantage": false
       },
@@ -84,22 +80,18 @@
             "value": 0
           }
         ],
-        "other": []
+        "other": ""
       },
       "skills": [
         {
           "name":  "TEST",
-          "skill": "Aucun",
-          "bonus": 0
+          "skill": "Aucun"
         }
       ],
       "gift": [
         {
           "name":  "",
-          "psy": 0,
-          "dice_quantity": 0,
-          "dice_type": "d?",
-          "bonus": 0
+          "dice_type": "d?"
         }
       ],
       "passives": {
