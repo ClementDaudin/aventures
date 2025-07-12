@@ -1,0 +1,48 @@
+<form class="flexcol {{cssClass}} weapon-sheet" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{data.img}}" data-edit="img" title="{{data.name}}" />
+        <div class="header-fields">
+            <h1 class="weaponName">
+                <input name="name" type="text" value="{{item.name}}" placeholder="Nom">
+            </h1>
+        </div>
+    </header>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+        <label>Description </label>
+        {{editor descriptionHTML target="system.description" button=true editable=editable engine="prosemirror"}}
+        <div class="attributeValues">
+            <label class="input-label body_type">
+                <span class="h5" data-i18n="body type">Type</span>
+                <select name="system.type" title="@{type}" id="type">
+                    <option value="type" {{#if (eq systemData.type "type")}}selected{{/if}}>Type</option>
+                    <option value="contondant"{{#if (eq systemData.type "contondant")}}selected{{/if}}>Contondant</option>
+                    <option value="perforant"{{#if (eq systemData.type "perforant")}}selected{{/if}}>Perforant</option>
+                    <option value="tranchant"{{#if (eq systemData.type "tranchant")}}selected{{/if}}>Tranchant</option>
+                </select>
+            </label>
+            <label class="input-label body_dice">
+                <span class="h5" data-i18n="body dice">Nombre de dés</span>
+            <input name="system.dice_quantity" type="text" value="{{systemData.dice_quantity}}" placeholder="0">
+            </label>
+            <label class="input-label body_dice_type">
+                <span class="h5" data-i18n="body dice_type">Type de dés</span>
+            <select name="system.dice_number" title="@{dice_number}" id="dice_number">
+                <option value="d?" data-i18n="d?" {{#if (eq systemData.dice_number "d?")}}selected{{/if}}>d?</option>
+                <option value="d4" data-i18n="d4" {{#if (eq systemData.dice_number "d4")}}selected{{/if}}>d4</option>
+                <option value="d6" data-i18n="d6" {{#if (eq systemData.dice_number "d6")}}selected{{/if}}>d6</option>
+                <option value="d8" data-i18n="d8" {{#if (eq systemData.dice_number "d8")}}selected{{/if}}>d8</option>
+                <option value="d10" data-i18n="d10" {{#if (eq systemData.dice_number "d10")}}selected{{/if}}>d10</option>
+                <option value="d12" data-i18n="d12" {{#if (eq systemData.dice_number "d12")}}selected{{/if}}>d12</option>
+                <option value="d20" data-i18n="d20" {{#if (eq systemData.dice_number "d20")}}selected{{/if}}>d20</option>
+            </select>
+            </label>
+            <label class="input-label body_bonus">
+                <span class="h5" data-i18n="body bonus">Bonus</span>
+            <input name="system.bonus" type="number" value="{{systemData.bonus}}" placeholder="0">
+            </label>
+        </div>
+    </section>
+</form>
+

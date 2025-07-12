@@ -18,5 +18,15 @@ export default class aventuresItemSheet extends ItemSheet{
 
     activateListeners(html) {
         super.activateListeners(html);
+        const el = html[0].closest(".app");
+
+        const observer = new ResizeObserver(entries => {
+            for (let entry of entries) {
+                const width = entry.contentRect.width;
+                el.classList.toggle("compact", width < 500);
+            }
+        });
+
+        observer.observe(el);
     }
 }

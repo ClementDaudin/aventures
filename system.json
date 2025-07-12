@@ -10,7 +10,7 @@
   "author": "Clément Daudin",
   "scripts": [],
   "esmodules": ["module/aventures.js"],
-  "styles": "css/aventures.css",
+  "styles": ["css/aventures.css", "css/weapons.css"],
   "packs": [],
   "languages": [],
   "gridDistance": 1.5,

@@ -4,11 +4,14 @@
 .sheet-rolltemplate-aventures{
     padding: 8px;
     background: url(../assets/aventures-bg.jpg) no-repeat center center fixed;
+    filter: saturate(3);
     color: #333;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
     line-height: 1.42857143;
     background-color: #fff;
+    overflow: visible;
+
 }
 
 .window-app .window-content{
@@ -84,7 +87,6 @@
 .statistics-attributes >* {
     border: 1px solid black;
     align-items: center;
-    font-size: 16px;
     font-weight: bold;
 }
 
@@ -141,7 +143,7 @@
 
 .roll-dice, .item-delete {
     width: 25px;
-    height: 30px;
+    height: 27px;
     text-align: center;
     padding: 2px;
     margin: 2px 0;
@@ -187,7 +189,6 @@ img{
     height: 16px;
     color: white;
     background-color: var(--color-checkbox-checked);
-    font-size: 15px;
     font-weight: bold;
     position: absolute;
     text-align: center;
@@ -250,9 +251,16 @@ img{
 
 .character-statistics-name{
     display: grid;
-    font-size: 16px;
     font-weight: bold;
+    justify-items: center;
 }
+
+.not_compact .character-statistics-name {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+}
+
 
 .character-statistics-value{
     display: flex;
@@ -266,7 +274,6 @@ img{
     text-align: center;
 }
 .basic-text-input{
-    font-size: 16px !important;
     font-weight: bold !important;
 }
 .max-stat-input{
@@ -299,28 +306,19 @@ img{
     gap: 1rem;
 }
 
-.skills-list-row, .gift-list-row, .equipment-list-row, .armor-list-row{
+.skills-list-row, .gift-list-row, .equipment-list-row, .armor-list-row, .weapons-list-row{
     display: flex;
     gap: 0.5rem;
     align-items: center;
+    margin: 0.5rem 0;
 }
 
-.skills-list-row .skill-name, .gift-list-row .gift-name{
-    width: 40%;
-}
-.equipment-list-row .equipment-name, .armor-list-row .armor-name{
-    width: -webkit-fill-available;
-}
 .equipment-list-row .equipment-quantity, .armor-list-row .armor-value{
     width: 10%;
 }
 
 .skill-type{
-    width: 30%;
-}
-
-.skills-list-row .skill-bonus, .gift-list-row .gift-bonus{
-    width: 3%;
+    width: 7em;
 }
 
 textarea{
@@ -338,14 +336,16 @@ textarea{
     width: 25%;
     text-align: center;
 }
-.gift-list-row .gift-psy{
-    width: 7%;
+.gift-list-row input[type="number"], .skills-list-row input[type="number"], .weapons-list-row input[type="number"]{
+    width: 3em;
 }
-.gift-list-row .gift-dice-quantity{
-    width: 7%;
-}
+
 .gift-list-row .gift-dice-type{
-    width: 15%;
+    width: 55px;
+}
+
+.roll-knowledges-equipment{
+    width: 45px;
 }
 
 .manage-list-row{
@@ -361,7 +361,47 @@ textarea{
 }
 .equipment_structure{
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, auto);
     grid-template-rows: repeat(3, auto);
     gap: 0.5rem;
+}
+
+.sheet-rolltemplate-aventures .editor {
+    border: 1px solid #d8d2c4;
+    border-radius: 6px;
+    padding: 8px;
+    color: #2a2a2a;
+    min-height: 300px;
+}
+.sheet-rolltemplate-aventures .prosemirror {
+    min-height: 900px;
+}
+
+.adventure-result{
+    text-align: left;
+}
+
+.adventure-result.is-result{
+    font-weight: bold;
+    color: green;
+}
+.adventure-result.is-negative-result{
+    font-weight: bold;
+    color: darkred;
+}
+
+.aventure {
+    background-color: #1f5e3c; /* vert foncé */
+    color: #e6f9e7;
+    font-weight: bold;
+    border-radius: 4px;
+    padding: 2px 6px;
+}
+
+.mésaventure {
+    background-color: #802020; /* rouge sombre */
+    color: #fbeaea;
+    font-weight: bold;
+    border-radius: 4px;
+    padding: 2px 6px;
 }

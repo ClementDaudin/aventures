@@ -122,7 +122,7 @@
                                    name={{concat "system.attributes." key "." subkey ".base"}}
                             value="{{subattr.base}}"
                             placeholder="0" />
-                            <button class="roll-dice" data-attribute="{{subkey}}" data-dice="1d?" data-title="{{{subattr.label}}}" data-roll="{{subattr.base}}"><img src="systems/aventures/assets/dice.png"></button>
+                            <button class="roll-dice" data-attribute="{{subkey}}" data-dice="1d?" data-title="{{subattr.label}}" data-roll="{{subattr.base}}"><img src="systems/aventures/assets/dice.png"></button>
                         </div>
 
                         <div class="subattribute-malus {{subkey}}-malus">
@@ -192,14 +192,21 @@
                             </div>
                         </div>
                         <div class="character-statistics-row">
-                            <div class="character-statistics-name">Dés d'aventures</div>
+                            <div class="character-statistics-name">
+                                Dés d'aventures
+                                <button class="roll-dice data-attribute="roll-adventure" data-dice="" data-title="Dés d'aventure" data-type="adventure"><img src="systems/aventures/assets/dice.png"></button>
+                            </div>
                             <div class="character-statistics-value">
                                 Restant :
                                 <input type=number class="basic-text-input" name="system.dice.adventure" value="{{systemData.dice.adventure}}" placeholder="0" />
                             </div>
                         </div>
                         <div class="character-statistics-row">
-                            <div class="character-statistics-name">Dés de mésaventures</div>
+                            <div class="character-statistics-name">
+                                Dés de mésaventures
+                                <button class="roll-dice data-attribute="roll-misadventure" data-dice="" data-title="Dés de mésaventure" data-type="misadventure"><img src="systems/aventures/assets/dice.png"></button>
+
+                            </div>
                             <div class="character-statistics-value">
                                 Restant :
                                 <input type=number class="basic-text-input" name="system.dice.misadventure" value="{{systemData.dice.misadventure}}"  placeholder="0" />
@@ -231,9 +238,8 @@
                             {{#if @root.systemData.updateSkillsMode}}
                             <button class="item-delete" title="Supprimer la compétence" data-key="{{key}}" data-parameter="skills"><i class="fas fa-trash"></i></button>
                             {{else}}
-                            <button class="roll-dice" data-attribute="roll-skill" data-dice="1d100" data-title="{{lookup (lookup ../systemData.attributes skill.skill) 'label'}}" data-roll="{{add (lookup (lookup ../systemData.attributes skill.skill) 'base') skill.bonus}}"><img src="systems/aventures/assets/dice.png"></button>
+                            <button class="roll-dice roll-knowledges-equipment" data-attribute="roll-skill" data-dice="1d100" data-title="{{skill.name}}" data-roll="{{add (lookup (lookup ../systemData.attributes skill.skill) 'base') skill.bonus}}"><img src="systems/aventures/assets/dice.png"></button>
                             {{/if}}
-                            {{log ../systemData.attributes}}
                         </div>
                         {{/each}}
                         <div class="manage-list-row">
@@ -267,7 +273,7 @@
                             {{#if @root.systemData.updateGiftMode}}
                             <button class="item-delete" title="Supprimer le don" data-key="{{key}}" data-parameter="gift"><i class="fas fa-trash"></i></button>
                             {{else}}
-                            <button class="roll-dice" data-attribute="roll-gift" data-dice="1d100+?" data-title="@{roll-gift}" data-i18n="roll-gift"><img src="systems/aventures/assets/dice.png"></button>
+                            <button class="roll-dice roll-knowledges-equipment data-attribute="roll-gift" data-dice="{{gift.dice_quantity}}{{gift.dice_type}}{{#if gift.bonus}}{{#unless (eq gift.bonus 0)}}+{{gift.bonus}}{{/unless}}{{/if}}" data-title="{{gift.name}}" data-type="gift"><img src="systems/aventures/assets/dice.png"></button>
                             {{/if}}
                         </div>
                         {{/each}}
@@ -282,17 +288,55 @@
                     </div>
                 </div>
             </div>
-            <div id="module_component" class="modules">
-                <div class="category">Modules</div>
-                <textarea rows="10"  placeholder="TODO"></textarea>
+            <div id="notes_component" class="notes">
+                <div class="category">Notes</div>
+                {{editor notesHTML target="system.notes" button=true editable=editable engine="prosemirror"}}
             </div>
             <div id="equipment_component" class="equipment">
                 <div class="category">Équipements</div>
                 <div class="equipment_structure">
                     <div class="weapons">
                         <h3>Armes</h3>
-                        {{#each systemData.equipment.weapons as | weapon key|}}
+                        {{#each weapons as | weapon key|}}
+                        <div class="weapons-list-row">
+                            <input class="weapon-name" type="text" data-item-id="{{weapon._id}}" value="{{weapon.name}}" placeholder="Nom de l'arme">
+
+                            <select class="weapon-type" data-item-id="{{weapon._id}}">
+                                <option value="type" {{#if (eq weapon.system.type "type")}}selected{{/if}}>Type</option>
+                                <option value="contondant" {{#if (eq weapon.system.type "contondant")}}selected{{/if}}>Contondant</option>
+                                <option value="perforant" {{#if (eq weapon.system.type "perforant")}}selected{{/if}}>Perforant</option>
+                                <option value="tranchant" {{#if (eq weapon.system.type "tranchant")}}selected{{/if}}>Tranchant</option>
+                            </select>
+
+                            <input class="weapon-dice_quantity" type="number" data-item-id="{{weapon._id}}" value="{{weapon.system.dice_quantity}}" placeholder="0">
+
+                            <select class="weapon-dice_number" data-item-id="{{weapon._id}}">
+                                <option value="d?" {{#if (eq weapon.system.dice_number "d?")}}selected{{/if}}>d?</option>
+                                <option value="d4" {{#if (eq weapon.system.dice_number "d4")}}selected{{/if}}>d4</option>
+                                <option value="d6" {{#if (eq weapon.system.dice_number "d6")}}selected{{/if}}>d6</option>
+                                <option value="d8" {{#if (eq weapon.system.dice_number "d8")}}selected{{/if}}>d8</option>
+                                <option value="d10" {{#if (eq weapon.system.dice_number "d10")}}selected{{/if}}>d10</option>
+                                <option value="d12" {{#if (eq weapon.system.dice_number "d12")}}selected{{/if}}>d12</option>
+                                <option value="d20" {{#if (eq weapon.system.dice_number "d20")}}selected{{/if}}>d20</option>
+                            </select>
+
+                            +
+                            <input class="weapon-bonus" type="number" data-item-id="{{weapon._id}}" value="{{weapon.system.bonus}}" placeholder="0">
+                            {{#if @root.systemData.updateWeaponsMode}}
+                            <button class="item-delete" title="Supprimer la compétence" data-key="{{weapon._id}}" data-parameter="weapon"><i class="fas fa-trash"></i></button>
+                            {{else}}
+                            <button class="roll-dice roll-knowledges-equipment" data-title="{{weapon.name}}" data-damagetype="{{weapon.system.type}}" data-attribute="roll-weapons-damage" data-dice="{{weapon.system.dice_quantity}}{{weapon.system.dice_number}}{{#if weapon.system.bonus}}{{#unless (eq weapon.system.bonus 0)}}+{{weapon.system.bonus}}{{/unless}}{{/if}}" data-type="weapons"><img src="systems/aventures/assets/dice.png"></button>
+                            {{/if}}
+                        </div>
                         {{/each}}
+                        <div class="manage-list-row">
+                            {{#if systemData.updateWeaponsMode}}
+                            <button class="done-button switchModeButton" data-parameter="updateWeaponsMode" data-value="false"><span>Terminé</span></button>
+                            {{else}}
+                            <button class="add-button" data-key="weapon" id="addWeapon"><span>+Ajouter</span></button>
+                            <button class="modify-button switchModeButton" data-parameter="updateWeaponsMode" data-value="true"><span>Modifier</span></button>
+                            {{/if}}
+                        </div>
                     </div>
                     <div class="armor">
                         <h3>Armure</h3>

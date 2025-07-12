@@ -1,0 +1,95 @@
+.weapon-sheet {
+    font-family: "Signika", sans-serif;
+    background: #f4f0e8;
+    padding: 16px;
+    color: #2a2a2a;
+}
+
+/* --------- HEADER --------- */
+.weapon-sheet .sheet-header {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+}
+
+.weapon-sheet .profile-img {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: contain;
+    margin-right: 16px;
+    box-shadow: 0 0 4px rgba(0,0,0,0.1);
+}
+
+.weapon-sheet .weaponName input {
+    font-size: 1.4em;
+    font-weight: bold;
+    border: none;
+    border-bottom: 2px solid #b0a88c;
+    background: transparent;
+    color: #2a2a2a;
+    width: 100%;
+}
+
+/* --------- BODY --------- */
+.weapon-sheet .sheet-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Description Editor */
+.weapon-sheet .editor {
+    background: #fff;
+    border: 1px solid #d8d2c4;
+    border-radius: 6px;
+    padding: 8px;
+    color: #2a2a2a;
+    min-height: 180px; /* Augmente la hauteur ici */
+    resize: vertical;  /* Permet de redimensionner manuellement si tu veux */
+}
+
+/* Inputs / Labels */
+.weapon-sheet .attributeValues {
+    display: grid;
+    grid-template-columns: 1fr 0.7fr 1fr 1fr;
+    gap: 10px;
+    align-items: end;
+    margin-top: 8px;
+}
+
+.weapon-sheet .attributeValues label,
+.weapon-sheet label.input-label {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #5a4b3c;
+}
+
+.weapon-sheet select,
+.weapon-sheet input[type="text"],
+.weapon-sheet input[type="number"] {
+    border: 1px solid #b8b0a0;
+    border-radius: 5px;
+    padding: 4px 6px;
+    font-size: 0.95em;
+    background: #fdfbf5;
+    color: #2a2a2a;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.weapon-sheet select:focus,
+.weapon-sheet input:focus {
+    outline: none;
+    border-color: #9a8565;
+    background-color: #fffefc;
+}
+
+.compact .attributeValues {
+    grid-template-columns: repeat(2, 1fr);
+}
+

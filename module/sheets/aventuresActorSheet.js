@@ -5,6 +5,12 @@ export default class aventuresActorSheet extends ActorSheet {
         this.data = null;
         this.currentHtml = null;
     }
+    static get defaultOptions() {
+        return mergeObject(super.defaultOptions, {
+            width: 830,
+            resizable: true
+        });
+    }
 
     get template() {
         console.log(`aventures | Récupération du fichier html ${this.actor.type}-sheet.`);
@@ -14,7 +20,7 @@ export default class aventuresActorSheet extends ActorSheet {
     async getData(options) {
         this.data = await super.getData(options);
         this.data.systemData = this.data.data.system;
-        this.data.descriptionHTML = await TextEditor.enrichHTML(this.data.systemData.biography, {
+        this.data.notesHTML = await TextEditor.enrichHTML(this.data.systemData.notes, {
             secrets: this.document.isOwner,
             async: true
         });
@@ -23,14 +29,18 @@ export default class aventuresActorSheet extends ActorSheet {
             this.data.systemData.updateGiftMode = false;
             this.data.systemData.updateGeneralEquipmentMode = false;
             this.data.systemData.updateArmorMode = false;
+            this.data.systemData.updateWeaponsMode = false;
             await this.actor.update({
                 "system.updateSkillsMode": false,
                 "system.updateGiftMode": false,
                 "system.updateGeneralEquipmentMode": false,
-                "system.updateArmorMode": false
+                "system.updateArmorMode": false,
+                "system.updateWeaponsMode": false
             });
             sessionStorage.removeItem("launchFoundry");
         }
+        this.data.weapons = this.actor.items.filter(i => i.type === "weapon");
+
         console.log(this.data);
         return this.data;
     }
@@ -38,13 +48,25 @@ export default class aventuresActorSheet extends ActorSheet {
     activateListeners(html) {
         this.currentHtml = html;
         super.activateListeners(html);
+
+        const el = html[0].closest(".app");
+
+        const observer = new ResizeObserver(entries => {
+            for (let entry of entries) {
+                const width = entry.contentRect.width;
+                el.classList.toggle("not_compact", width > 1000);
+            }
+        });
+
+        observer.observe(el);
+
         if (localStorage.getItem('page') === "skills") {
             html.find("#skills_component")[0].style.display = "block";
-            html.find("#module_component")[0].style.display = "block";
+            html.find("#notes_component")[0].style.display = "block";
             html.find("#equipment_component")[0].style.display = "none";
        }else if (localStorage.getItem('page') === "equipment") {
             html.find("#skills_component")[0].style.display = "none";
-            html.find("#module_component")[0].style.display = "none";
+            html.find("#notes_component")[0].style.display = "none";
             html.find("#equipment_component")[0].style.display = "block";
             localStorage.setItem('page', 'equipment');
         }
@@ -91,6 +113,11 @@ export default class aventuresActorSheet extends ActorSheet {
         html.find(".item-delete").click(async ev => {
             const key = ev.currentTarget.dataset.key;
             const parameter = ev.currentTarget.dataset.parameter;
+            console.log(key);
+            if(parameter === "weapon"){
+                await this.actor.deleteEmbeddedDocuments("Item", [key]);
+                return;
+            }
             await this.actor.update({
                 [`system.${parameter}.-=${key}`]: null
             });
@@ -109,7 +136,8 @@ export default class aventuresActorSheet extends ActorSheet {
                 "system.updateSkillsMode": false,
                 "system.updateGiftMode": false,
                 "system.updateGeneralEquipmentMode": false,
-                "system.updateArmorMode": false
+                "system.updateArmorMode": false,
+                "system.updateWeaponsMode": false
             });
 
             const actionName = ev.currentTarget.getAttribute("name"); // ex: "act_skills" ou "act_equipment"
@@ -117,23 +145,71 @@ export default class aventuresActorSheet extends ActorSheet {
             // Choisis la div où ajouter le hidden selon l'action
             if (actionName === "act_skills") {
                 html.find("#skills_component")[0].style.display = "block";
-                html.find("#module_component")[0].style.display = "block";
+                html.find("#notes_component")[0].style.display = "block";
                 html.find("#equipment_component")[0].style.display = "none";
                 localStorage.setItem('page', 'skills');
 
             } else if (actionName === "act_equipment") {
                 html.find("#skills_component")[0].style.display = "none";
-                html.find("#module_component")[0].style.display = "none";
+                html.find("#notes_component")[0].style.display = "none";
                 html.find("#equipment_component")[0].style.display = "block";
                 localStorage.setItem('page', 'equipment');
             }
         });
 
         html.find(".roll-dice").click(ev => {
-            const diceToRoll = ev.currentTarget.dataset.dice;
+            const formula = ev.currentTarget.dataset.dice;
+            const rollCategory = ev.currentTarget.dataset.type;
+            const diceTitle = ev.currentTarget.dataset.title;
+
+            if(rollCategory === "adventure"){
+                const roll = new Roll("1d6");
+                this.generateRollMessage({
+                    roll,
+                    diceTitle: diceTitle,
+                    isAdventure: 1,
+                });
+                return;
+            }
+            if(rollCategory === "misadventure"){
+                const roll = new Roll("1d6");
+                this.generateRollMessage({
+                    roll,
+                    diceTitle: diceTitle,
+                    isAdventure: 2,
+                });
+                return;
+            }
+            if(rollCategory === "weapons"){
+                const weaponType = ev.currentTarget.dataset.damagetype;
+                const roll = new Roll(formula);
+                const match = formula.match(/^(\d+)[dD](\d+)(?:\+(\d+))?$/);
+                const max = parseInt(match[1]) * parseInt(match[2]) + parseInt(match[3] ?? "0");
+                const min = parseInt(match[1]) + parseInt(match[3] ?? "0");
+                this.generateRollMessage({
+                    roll,
+                    diceTitle: diceTitle,
+                    weaponType: weaponType,
+                    isDamage: true,
+                    min: min,
+                    max: max
+                });
+                return;
+            }
+            if(rollCategory === "gift"){
+                const roll = new Roll(formula);
+                const match = formula.match(/^(\d+)[dD](\d+)(?:\+(\d+))?$/);
+                const max = parseInt(match[1]) * parseInt(match[2]) + parseInt(match[3] ?? "0");
+                this.generateRollMessage({
+                    roll,
+                    diceTitle: diceTitle,
+                    isDamage: true,
+                    max: max
+                });
+                return;
+            }
             const diceStat = ev.currentTarget.dataset.roll;
-            const diceType = ev.currentTarget.dataset.title;
-            this.rollDice(diceToRoll, diceStat, diceType);
+            this.rollDice(formula, diceStat, diceTitle);
         });
 
         html.find(".updateBonus").click(async ev => {
@@ -163,6 +239,39 @@ export default class aventuresActorSheet extends ActorSheet {
                 await token.document.update({tint: null});
                 await token.toggleEffect(`icons/svg/skull.svg`, {active: false});
             }
+        });
+
+        const saveField = async (el, path, isNumber = false) => {
+            const itemId = el.data("itemId");
+            const item = this.actor.items.get(itemId);
+            if (!item) return;
+
+            const value = isNumber ? Number(el.val()) : el.val();
+            await item.update({ [path]: value });
+        };
+
+        html.find(".weapon-name").on("change", async ev => {
+            await saveField($(ev.currentTarget), "name");
+        });
+
+        // Type
+        html.find(".weapon-type").on("change", async ev => {
+            await saveField($(ev.currentTarget), "system.type");
+        });
+
+        // Dice quantity
+        html.find(".weapon-dice_quantity").on("change", async ev => {
+            await saveField($(ev.currentTarget), "system.dice_quantity", true);
+        });
+
+        // Dice number
+        html.find(".weapon-dice_number").on("change", async ev => {
+            await saveField($(ev.currentTarget), "system.dice_number");
+        });
+
+        // Bonus
+        html.find(".weapon-bonus").on("change", async ev => {
+            await saveField($(ev.currentTarget), "system.bonus", true);
         });
     }
 
@@ -200,6 +309,18 @@ export default class aventuresActorSheet extends ActorSheet {
                 "system.equipment.armor": armor
             })
         }
+        else if (type === "weapon"){
+            const newWeapon = {
+                name: "Nom",
+                type: "weapon",
+                system: {
+                    description: "",
+                    type: "Aucun",
+                    dice_number: "d?"
+                }
+            }
+            this.actor.createEmbeddedDocuments("Item", [newWeapon]);
+        }
     }
 
     async close(options = {}){
@@ -207,18 +328,17 @@ export default class aventuresActorSheet extends ActorSheet {
             "system.updateSkillsMode": false,
             "system.updateGiftMode": false,
             "system.updateGeneralEquipmentMode": false,
-            "system.updateArmorMode": false
+            "system.updateArmorMode": false,
+            "system.updateWeaponsMode": false
         });
         return super.close(options);
     }
 
-
     async _updateObject(event, formData) {
-        console.log("Submitting form data", formData);
         await this.actor.update(formData);
     }
 
-    async rollDice(diceToRoll, diceStat, diceType) {
+    async rollDice(diceToRoll, diceStat, diceTitle) {
         const hideDieSelect = diceToRoll === "1d?";
 
         new Dialog({
@@ -257,84 +377,13 @@ export default class aventuresActorSheet extends ActorSheet {
                         }
 
                         const roll = new Roll(formula);
-                        roll.roll({async: true}).then(r => {
-                            let result = roll.total;
-                            const seuilVert = Math.max(1/max, Math.ceil(0.05 * max))
-                            const seuilRouge = Math.min(max, 95)
-                            const rightOffset = diceStat < 10 ? "18px" : "12px";
-                            const playerColor = game.user.color;
-                            console.log(playerColor)
-                            let color = "#3e2d17";
-                            if (result <= seuilVert) {
-                                color = "green";
-                            } else if (result >= seuilRouge) {
-                                color = "red";
-                            }
-                            const tokenImg = this.actor.token?.texture?.src ?? this.actor.img ?? "icons/svg/mystery-man.svg";
-                            const messageContent =
-                                          `<div style="
-                                              font-family: 'Obra Letra', sans-serif;
-                                              text-align: center;
-                                              color: #3e2d17;
-                                              position: relative;
-                                              user-select: none;
-                                              height: 170px;
-                                           ">
-                                                <img src="/systems/aventures/assets/roll-card-aventure.png" 
-                                                    style="
-                                                        position: absolute;
-                                                        top: 0;
-                                                        left: 0;
-                                                        width: 100%;
-                                                        height: 100%;
-                                                        image-rendering: crisp-edges;
-                                                        z-index: 0;
-                                                        pointer-events: none;
-                                              " />
-                                              <div style="
-                                                position: absolute;
-                                                top: 2px;
-                                                right: 10px;
-                                                width: 25px;
-                                                height: 39px;
-                                                background-color: ${playerColor};
-                                                clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%);
-                                                box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-                                              "></div>
-                                              <img src="${tokenImg}" style="
-                                                    position: absolute;
-                                                    top: 4px;
-                                                    right: 10px;
-                                                    width: 25px;
-                                                    height: 25px;
-                                                    object-fit: cover;
-                                                    z-index: 2;
-                                                  ">
-                                             <div style="position: relative; z-index: 1; padding-top: 8px;">
-                                                <div style="font-weight: 600; font-size: 1.5em; margin-bottom: 10px; letter-spacing: 0.05em">
-                                                  Jet de <br/>${diceType}
-                                                </div>
-                                                <div style="font-size: 4em; font-weight: 900; letter-spacing: 0.15em; color: ${color};">
-                                                  ${result}
-                                                </div>
-                                                <div style="
-                                                  position: absolute;
-                                                  top: 115px;
-                                                  right: ${rightOffset};
-                                                  font-size: 25px;
-                                                  z-index: 2;
-                                                  color: #e6dab9;
-                                                ">
-                                                  ${diceStat}
-                                                </div>
-                                             </div>
-                                        </div>`;
-                            AudioHelper.play({src: CONFIG.sounds.dice, volume: 0.8, autoplay: true, loop: false}, true);
-                            ChatMessage.create({
-                                speaker: ChatMessage.getSpeaker({actor: this.actor}),
-                                content: messageContent,
-                            });
+                        this.generateRollMessage({
+                            roll,
+                            diceTitle: diceTitle,
+                            diceStat: diceStat,
+                            max: max
                         });
+                       // this.generateMessage2(roll, max, diceStat, diceTitle);
                     }
                 },
                 cancel: {
@@ -344,5 +393,151 @@ export default class aventuresActorSheet extends ActorSheet {
             default: "roll"
         }).render(true);
     }
+
+    generateRollMessage({ roll, diceTitle, diceStat = null, min = null, max = null, weaponType = null, isDamage = false, isAdventure = null }) {
+        roll.roll({ async: true }).then(r => {
+            const result = r.total;
+            const playerColor = game.user.color;
+            const tokenImg = this.actor.token?.texture?.src ?? this.actor.img ?? "icons/svg/mystery-man.svg";
+
+            let color = "#3e2d17";
+            let rightOffset = diceStat < 10 ? "18px" : "12px";
+            const adventureIndex = Math.ceil(result / 2);
+            let adventureClass = "mésaventure";
+            if(!isAdventure){
+                if (!isDamage && max !== null) {
+                    const seuilVert = Math.max(1 / max, Math.ceil(0.05 * max));
+                    const seuilRouge = Math.min(max, 95);
+                    if (result <= seuilVert) color = "green";
+                    else if (result >= seuilRouge) color = "red";
+                }else{
+                    if (result <= min) color = "red";
+                    else if (result >= max) color = "green";
+                }
+            }else{
+                let adventureDice = this.data.systemData.dice.adventure;
+                let misadventureDice = this.data.systemData.dice.misadventure;
+
+                if (isAdventure === 1 && adventureDice > 0){
+                    adventureClass = "aventure";
+                    adventureDice--;
+                    misadventureDice++
+                }
+                else if (isAdventure === 2 && misadventureDice > 0){
+                    adventureClass = "mésaventure";
+                    misadventureDice--;
+                    adventureDice++
+                }
+                else{
+                    ui.notifications.error(`Tu n'as plus assez de dés ${isAdventure === 1 ? "d'aventure" : "de mésaventure"}`);
+                    return;
+                }
+                this.actor.update({
+                    "system.dice.adventure": adventureDice,
+                    "system.dice.misadventure": misadventureDice
+                })
+            }
+
+            // Choix de l'image de fond
+            const backgroundImage = isDamage || isAdventure
+                ? "/systems/aventures/assets/roll-damage.png"
+                : "/systems/aventures/assets/roll-card-aventure.png";
+
+            // Partie haute
+            const titleBlock = isDamage || isAdventure
+                ? (weaponType
+                        ? `
+        <div style="font-weight: 700; font-size: 2.2em; margin-bottom: 4px; word-break: break-word; white-space: normal;">
+            ${diceTitle}
+            <div style="font-weight: 400; font-size: 0.9em;">
+                (${weaponType})
+            </div>
+        </div>`
+                        : `
+        <div style="font-weight: 700; font-size: ${isAdventure ? "1.4em" : "2.0em"}; margin: 4px 35px; word-break: break-word; white-space: normal;">
+  ${diceTitle}
+</div>`
+                )
+                : `
+    <div style="font-weight: 600; font-size: 1.5em; margin-bottom: 10px; letter-spacing: 0.05em">
+        Jet de <br/>${diceTitle}
+    </div>`;
+
+            // Partie basse :
+            const infoBlock = isDamage
+                ? `
+    <div style="font-size: 4em; font-weight: 900; letter-spacing: 0.15em; color: ${color};">
+      ${result}
+    </div>`
+                : isAdventure
+                    ? `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; font-family: 'Obra Letra', sans-serif; font-size: 1.2em; margin-top: 8px;">
+                      <div>Jet</div><div class="adventure-result">${result}</div>
+                      <div>1-2</div><div class="adventure-result ${adventureIndex === 1 ? adventureClass : ''}">Déplacement</div>
+                      <div>3-4</div><div class="adventure-result ${adventureIndex === 2 ? adventureClass : ''}">Posture</div>
+                      <div>5-6</div><div class="adventure-result ${adventureIndex === 3 ? adventureClass : ''}">In extremis</div>
+                    </div>` 
+                    : `
+                    <div style="font-size: 4em; font-weight: 900; letter-spacing: 0.15em; color: ${color};">
+                      ${result}
+                    </div>
+                    <div style="
+                      position: absolute;
+                      top: 115px;
+                      right: ${rightOffset};
+                      font-size: 25px;
+                      z-index: 2;
+                      color: #e6dab9;
+                    ">
+                      ${diceStat}
+                    </div>`;
+
+            const messageContent = `
+            <div style="
+                font-family: 'Obra Letra', sans-serif;
+                text-align: center;
+                color: #3e2d17;
+                position: relative;
+                user-select: none;
+                height: 170px;
+            ">
+                <img src="${backgroundImage}" 
+                     style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+                            image-rendering: crisp-edges; z-index: 0; pointer-events: none;" />
+                <div style="
+                    position: absolute;
+                    top: 2px;
+                    right: 10px;
+                    width: 25px;
+                    height: 39px;
+                    background-color: ${playerColor};
+                    clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%);
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                "></div>
+                <img src="${tokenImg}" style="
+                    position: absolute;
+                    top: 4px;
+                    right: 10px;
+                    width: 25px;
+                    height: 25px;
+                    object-fit: cover;
+                    z-index: 2;
+                ">
+                <div style="position: relative; z-index: 1; padding-top: 10px;">
+                    ${titleBlock}
+                    ${infoBlock}
+                </div>
+            </div>
+        `;
+
+            AudioHelper.play({ src: CONFIG.sounds.dice, volume: 0.8, autoplay: true, loop: false }, true);
+
+            ChatMessage.create({
+                speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+                content: messageContent,
+            });
+        });
+    }
+
 }
 

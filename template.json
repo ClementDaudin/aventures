@@ -1,9 +1,9 @@
 {
   "Actor": {
     "types": ["aventurier"],
-    "htmlFields": ["biography"],
+    "htmlFields": ["notes"],
     "aventurier": {
-      "biography": "",
+      "notes": "",
       "race": "",
       "raceDescription": "",
       "classDescription": "",
@@ -14,7 +14,6 @@
       "age": "",
       "languages": "",
       "vocation": "",
-      "credits": 0,
       "attributes": {
         "strength": {
           "label": "Physique",
@@ -66,18 +65,14 @@
         "disadvantage": false
       },
       "equipment": {
-        "weapons": [
-        ],
         "general": [
           {
-            "name": "",
-            "quantity": 0
+            "name": ""
           }
         ],
         "armor": [
           {
-            "name": "",
-            "value": 0
+            "name": ""
           }
         ],
         "other": ""
@@ -106,15 +101,12 @@
     }
   },
   "Item": {
-    "types": ["arme"],
+    "types": ["weapon"],
     "htmlFields": ["description"],
-    "arme": {
-      "id": 0,
+    "weapon": {
       "description": "",
       "type": "Aucun",
-      "dice_quantity": 0,
-      "dice_number": "d?",
-      "bonus": 0
+      "dice_number": "d?"
     }
   }
 }
