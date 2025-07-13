@@ -197,19 +197,14 @@ export default class aventuresActorSheet extends ActorSheet {
                 return;
             }
             if(rollCategory === "gift"){
-                const roll = new Roll(formula);
                 const match = formula.match(/^(\d+)[dD](\d+)(?:\+(\d+))?$/);
-                const max = parseInt(match[1]) * parseInt(match[2]) + parseInt(match[3] ?? "0");
-                this.generateRollMessage({
-                    roll,
-                    diceTitle: diceTitle,
-                    isDamage: true,
-                    max: max
-                });
+                const max = parseInt(match[1]) * parseInt(match[2]) + parseInt(match[3] ?? null);
+                const min = parseInt(match[1]) + parseInt(match[3] ?? null);
+                this.rollDice({ diceToRoll: formula, diceTitle: diceTitle, isDamage: true, min: min, max: max });
                 return;
             }
             const diceStat = ev.currentTarget.dataset.roll;
-            this.rollDice(formula, diceStat, diceTitle);
+            this.rollDice({diceToRoll: formula, diceStat: diceStat, diceTitle: diceTitle});
         });
 
         html.find(".updateBonus").click(async ev => {
@@ -338,7 +333,7 @@ export default class aventuresActorSheet extends ActorSheet {
         await this.actor.update(formData);
     }
 
-    async rollDice(diceToRoll, diceStat, diceTitle) {
+    async rollDice({diceToRoll, diceStat = null, diceTitle, isDamage = false, min = null,  max = null}) {
         const hideDieSelect = diceToRoll === "1d?";
 
         new Dialog({
@@ -367,8 +362,14 @@ export default class aventuresActorSheet extends ActorSheet {
                     callback: html => {
                         let formula = diceToRoll;
                         const modifier = parseInt(html.find('[name="modifier"]').val()) || 0;
-                        diceStat = Math.min( Number(diceStat) + modifier, 95);
-                        let max=100;
+                        if(isDamage){
+                            formula+=`+${modifier}`;
+                        }
+                        else{
+                            diceStat = Math.min( Number(diceStat) + modifier, 95);
+                        }
+                        max = isDamage ? max + modifier : 100;
+                        min = isDamage ? min + modifier : null;
 
                         if(hideDieSelect){
                             const die = html.find('[name="die"]').val();
@@ -381,7 +382,9 @@ export default class aventuresActorSheet extends ActorSheet {
                             roll,
                             diceTitle: diceTitle,
                             diceStat: diceStat,
-                            max: max
+                            min: min,
+                            max: max,
+                            isDamage: isDamage,
                         });
                     }
                 },
