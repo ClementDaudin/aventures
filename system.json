@@ -1,8 +1,8 @@
 {
   "id": "aventures",
   "title" : "Aventures",
-  "description" : "Mode de jeu Aventures pour La Bonne Gachette",
-  "version": "0.1.0",
+  "description" : "Mode de jeu Aventures pour La Bonne Gâchette",
+  "version": "1.0.0",
   "compatibility": {
     "minimum": "11",
     "verified": "11"
