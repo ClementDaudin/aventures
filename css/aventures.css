@@ -3,8 +3,8 @@
 }
 .sheet-rolltemplate-aventures{
     padding: 8px;
-    background: url(../assets/aventures-bg.jpg) no-repeat center center fixed;
-    filter: saturate(3);
+    background: url(../assets/aventures-bg.png) no-repeat center center fixed;
+    filter: saturate(1);
     color: #333;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
@@ -404,4 +404,38 @@ textarea{
     font-weight: bold;
     border-radius: 4px;
     padding: 2px 6px;
+}
+#section-tabs {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    display: flex;
+    gap: 6px;
+    z-index: 50;
+    font-size: 0.85rem;
+}
+
+/* On garde les radios cachés */
+#section-tabs input[type="radio"] {
+    display: none;
+}
+
+/* Style des labels discrets */
+#section-tabs label.section-control {
+    background-color: transparent;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-weight: normal;
+    cursor: pointer;
+    color: #333;
+    transition: all 0.2s ease;
+}
+
+/* Onglet actif */
+#section-tabs input[type="radio"]:checked + label.section-control {
+    background-color: #f0c978;
+    border-color: #888;
+    font-weight: bold;
+    color: #111;
 }

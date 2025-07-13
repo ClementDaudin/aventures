@@ -2,73 +2,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Obra+Letra&display=swap" rel="stylesheet">
     <header class="sheet-header">
         <img class="sheet-header-logo" src="systems/aventures/assets/aventures-logo.png" alt="logo">
-       <!-- <div id="ma_popup" class="popup" style="display: none">-->
-            <!-- Contenu de la popup -->
-          <!--  <div class="popup-content">
-                <span class="closePopup">&times;</span>
-                <h2>Lancement des dés</h2>
-                <div>
-                    <label class="input-label diceUse">
-                    <select name="diceUse" title="@{diceUse}" id="diceUse">
-                        <option value="true" data-i18n="oui">Oui</option>
-                        <option value="false" data-i18n="non">Non</option>
-                    </select><span class="h5" data-i18n="diceUse">Utiliser les meilleurs dés ?</span>
-                </label>
-                </div>
-                <div>
-                    <label class="input-label diceToUse" style="display: none">
-                    <span class="h5" data-i18n="diceToUse">d12 : </span>
-                    <select name="diceToUse" class="chooseDice" title="@{d12Selected}" id="d12Selected">
-                    </select>
-                    <span class="h5" data-i18n="diceToUse">d10 : </span>
-                    <select name="diceToUse" class="chooseDice" title="@{d10Selected}" id="d10Selected">
-                    </select>
-                    <span class="h5" data-i18n="diceToUse">d8 : </span>
-                    <select name="diceToUse" class="chooseDice" title="@{d8Selected}" id="d8Selected">
-                    </select>
-                </label>
-                </div>
-                <div>
-                    <label class="input-label exertionUse" style="display: none">
-                    <span class="h5" data-i18n="exertionUse">Utiliser des points d'exertion ?</span>
-                    <select name="exertionUse" title="@{exertionUse}" id="exertionUse" >
-                        <option value="0">0</option>
-                    </select>
-                </label>
-                </div>
-                <div>
-                    <label class="input-label targetPlayer">
-                    <span class="h5" data-i18n="exertionUse">Cible du lancé</span>
-                    <select name="launchTarget" title="@{launchTarget}" id="launchTarget" >
-                        <option value="Public">Public</option>
-                        <option value="Perso">Perso</option>
-                        <option value="Hidden">Cachés</option>
-                    </select>
-                </label>
-                </div>
-                <div style="text-align: center">
-                    <label class="input-label launchDice">
-                        <span class="h5" data-i18n="lancer">Lancer</span>
-                    </label>
-                </div>
-            </div>
-        </div>-->
     </header>
 
     {{!-- Sheet Body --}}
     <section class="sheet-body">
-      <!--  <div id="section-tabs">
-            <input class="hidden" name="attr_section" type="radio" value="presentation" checked="" id="presentation-radio" title="@{section}">
-            <label class="presentation-radio section-control h5" for="presentation-radio" data-i18n="presentation">Présentation</label>
-            <input class="hidden" name="attr_section" type="radio" value="all" id="all-radio"  title="@{section}">
-            <label class="all-radio section-control h5" for="all-radio" data-i18n="all">Général</label>
-        </div>
-        <section class="main" id="main">
+      <div id="section-tabs">
+          <input class="hidden" name="attr_section" type="radio" value="presentation" checked="" id="presentation-radio" title="@{section}">
+          <label class="presentation-radio section-control h5" for="presentation-radio" data-i18n="presentation">Présentation</label>
+          <input class="hidden" name="attr_section" type="radio" value="main" id="main-radio"  title="@{general}">
+          <label class="all-radio section-control h5" for="main-radio" data-i18n="main">Général</label>
+      </div>
+        <section class="home" id="home">
         <div id="presentation" class="presentation">
             <img src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="128" width="128" alt=""/>
-            <textarea readonly>{{systemData.biography}}</textarea>
+          <!--  <textarea readonly>{{systemData.biography}}</textarea>-->
         </div>
--->
+
         <section class="main" id="main">
             <div class="character">
                 <div class="category">Personnage</div>

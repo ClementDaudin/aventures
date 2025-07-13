@@ -60,42 +60,42 @@ export default class aventuresActorSheet extends ActorSheet {
 
         observer.observe(el);
 
-        if (localStorage.getItem('page') === "skills") {
+        if (localStorage.getItem('inventory') === "skills") {
             html.find("#skills_component")[0].style.display = "block";
             html.find("#notes_component")[0].style.display = "block";
             html.find("#equipment_component")[0].style.display = "none";
-       }else if (localStorage.getItem('page') === "equipment") {
+       }else if (localStorage.getItem('inventory') === "equipment") {
             html.find("#skills_component")[0].style.display = "none";
             html.find("#notes_component")[0].style.display = "none";
             html.find("#equipment_component")[0].style.display = "block";
-            localStorage.setItem('page', 'equipment');
+            localStorage.setItem('inventory', 'equipment');
         }
-            /*html.find("#main-radio")[0].addEventListener('click', () => {
+        html.find("#main-radio")[0].addEventListener('click', () => {
+            html.find("#main")[0].style.display = "block";
+            html.find("#presentation")[0].style.display = "none";
+            localStorage.setItem('page', 'main')
+        })
+        html.find("#presentation-radio")[0].addEventListener('click', () => {
+            html.find("#main")[0].style.display = "none";
+            html.find("#presentation")[0].style.display = "flex";
+            localStorage.setItem('page', 'presentation')
+        })
+        if(!this.actor.isOwner){
+            localStorage.setItem('page', 'presentation');
+        }
+
+        switch (localStorage.getItem('page')) {
+            case "main":
                 html.find("#main")[0].style.display = "block";
                 html.find("#presentation")[0].style.display = "none";
-                localStorage.setItem('page', 'main')
-            })
-            html.find("#presentation-radio")[0].addEventListener('click', () => {
-                html.find("#main")[0].style.display = "none";
+                html.find("#main-radio")[0].checked = true;
+                break;
+            default:
                 html.find("#presentation")[0].style.display = "flex";
-                localStorage.setItem('page', 'presentation')
-            })
-            if(!this.actor.isOwner){
-                localStorage.setItem('page', 'presentation');
+                html.find("#main")[0].style.display = "none";
+                html.find("#presentation")[0].checked = true;
+                break;
             }
-
-            switch (localStorage.getItem('page')) {
-                case "main":
-                    html.find("#main")[0].style.display = "block";
-                    html.find("#presentation")[0].style.display = "none";
-                    html.find("#main-radio")[0].checked = true;
-                    break;
-                default:
-                    html.find("#presentation")[0].style.display = "flex";
-                    html.find("#main")[0].style.display = "none";
-                    html.find("#presentation")[0].checked = true;
-                    break;
-            }*/
 
         html.find(".switchModeButton").click(async ev => {
             const value = ev.currentTarget.dataset.value;
@@ -147,13 +147,13 @@ export default class aventuresActorSheet extends ActorSheet {
                 html.find("#skills_component")[0].style.display = "block";
                 html.find("#notes_component")[0].style.display = "block";
                 html.find("#equipment_component")[0].style.display = "none";
-                localStorage.setItem('page', 'skills');
+                localStorage.setItem('inventory', 'skills');
 
             } else if (actionName === "act_equipment") {
                 html.find("#skills_component")[0].style.display = "none";
                 html.find("#notes_component")[0].style.display = "none";
                 html.find("#equipment_component")[0].style.display = "block";
-                localStorage.setItem('page', 'equipment');
+                localStorage.setItem('inventory', 'equipment');
             }
         });
 
@@ -383,7 +383,6 @@ export default class aventuresActorSheet extends ActorSheet {
                             diceStat: diceStat,
                             max: max
                         });
-                       // this.generateMessage2(roll, max, diceStat, diceTitle);
                     }
                 },
                 cancel: {
