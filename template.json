@@ -1,8 +1,8 @@
 {
   "Actor": {
-    "types": ["aventurier"],
+    "types": ["Aventurier"],
     "htmlFields": ["notes"],
-    "aventurier": {
+    "Aventurier": {
       "notes": "",
       "race": "",
       "raceDescription": "",
@@ -101,9 +101,9 @@
     }
   },
   "Item": {
-    "types": ["weapon"],
+    "types": ["Arme"],
     "htmlFields": ["description"],
-    "weapon": {
+    "Arme": {
       "description": "",
       "type": "Aucun",
       "dice_number": "d?"

@@ -39,7 +39,7 @@ export default class aventuresActorSheet extends ActorSheet {
             });
             sessionStorage.removeItem("launchFoundry");
         }
-        this.data.weapons = this.actor.items.filter(i => i.type === "weapon");
+        this.data.weapons = this.actor.items.filter(i => i.type === "Arme");
 
         console.log(this.data);
         return this.data;
@@ -113,8 +113,7 @@ export default class aventuresActorSheet extends ActorSheet {
         html.find(".item-delete").click(async ev => {
             const key = ev.currentTarget.dataset.key;
             const parameter = ev.currentTarget.dataset.parameter;
-            console.log(key);
-            if(parameter === "weapon"){
+            if(parameter === "Arme"){
                 await this.actor.deleteEmbeddedDocuments("Item", [key]);
                 return;
             }
@@ -307,7 +306,7 @@ export default class aventuresActorSheet extends ActorSheet {
         else if (type === "weapon"){
             const newWeapon = {
                 name: "Nom",
-                type: "weapon",
+                type: "Arme",
                 system: {
                     description: "",
                     type: "Aucun",
