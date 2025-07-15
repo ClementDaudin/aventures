@@ -1,3 +1,15 @@
+@font-face {
+    font-family: 'Obra Letra';
+    src: url('../fonts/KCObraLetraRegular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Obra Letra';
+    src: url('../fonts/KCObraLetraBold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
 .sheet {
     min-width: min-content;
 }
@@ -6,7 +18,7 @@
     background: url(../assets/aventures-bg.jpg) no-repeat center center fixed;
     filter: saturate(1);
     color: #333;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Obra Letra", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
     line-height: 1.42857143;
     background-color: #fff;
@@ -438,4 +450,8 @@ textarea{
     border-color: #888;
     font-weight: bold;
     color: #111;
+}
+
+.sheet-rolltemplate-aventures input[type="number"]{
+    font-size: 1.2em;
 }
