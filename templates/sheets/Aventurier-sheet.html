@@ -99,7 +99,9 @@
                             <label class="input-label">Avantage<img src="systems/aventures/assets/advantage.png">
                             <input type="checkbox" class="updateBonus" data-attribute="advantage" name="system.dice.advantage" {{checked systemData.dice.advantage}} data-i18n="Avantage">
                             </label>
-                            |
+                            <span style="font-family: sans-serif">
+                                |
+                            </span>
                             <label class="input-label"> Désavantage <img src="systems/aventures/assets/disadvantage.png">
                             <input type="checkbox" class="updateBonus" data-attribute="disadvantage" name="system.dice.disadvantage" {{checked systemData.dice.disadvantage}} data-i18n="Avantage">
                             </label>
@@ -142,22 +144,17 @@
                         <div class="character-statistics-row">
                             <div class="character-statistics-name">
                                 Dés d'aventures
-                                <button class="roll-dice data-attribute="roll-adventure" data-dice="" data-title="Dés d'aventure" data-type="adventure"><img src="systems/aventures/assets/dice.png"></button>
                             </div>
                             <div class="character-statistics-value">
-                                Restant :
-                                <input type=number class="basic-text-input" name="system.dice.adventure" value="{{systemData.dice.adventure}}" placeholder="0" />
+                                Restant : <p class="adventure-dice">{{adventureDiceSetting}}</p>
                             </div>
                         </div>
                         <div class="character-statistics-row">
                             <div class="character-statistics-name">
                                 Dés de mésaventures
-                                <button class="roll-dice data-attribute="roll-misadventure" data-dice="" data-title="Dés de mésaventure" data-type="misadventure"><img src="systems/aventures/assets/dice.png"></button>
-
                             </div>
                             <div class="character-statistics-value">
-                                Restant :
-                                <input type=number class="basic-text-input" name="system.dice.misadventure" value="{{systemData.dice.misadventure}}"  placeholder="0" />
+                                Restant : <p class="adventure-dice">{{misadventureDiceSetting}}</p>
                             </div>
                         </div>
                     </div>

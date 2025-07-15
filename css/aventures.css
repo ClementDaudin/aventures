@@ -455,3 +455,55 @@ textarea{
 .sheet-rolltemplate-aventures input[type="number"]{
     font-size: 1.2em;
 }
+
+#aventures-roller {
+    position: fixed;
+    bottom: 30px;
+    right: 320px;
+    z-index: 99;
+    width: 15em;
+    padding: 6px 0;
+    font-family: "Obra Letra", sans-serif;
+}
+.adventure-button:hover,
+.misadventure-button:hover {
+    background-color: #3e3e3e;
+    border-color: #d4af37;
+}
+
+.adventure-button, .misadventure-button {
+    font-family: 'Georgia', serif;
+    font-weight: bold;
+    font-size: 1.1em;
+    padding: 10px 0;
+    border: 2px solid #7b4a0e;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #f0d28a, #c07a00);
+    color: #3d2200;
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.adventure-button:disabled, .misadventure-button:disabled {
+    background: #e0d9c3;        /* beige clair, neutre */
+    border-color: #b0a88a;     /* un gris/beige un peu foncé */
+    color: #7a7161;            /* texte gris/marron clair */
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.adventure-button:hover:not(:disabled), .misadventure-button:hover:not(:disabled) {
+    background: linear-gradient(135deg, #f7e6aa, #d29900);
+    box-shadow: 3px 3px 8px rgba(0,0,0,0.4);
+}
+
+#adventure-count, #misadventure-count {
+    font-weight: normal;
+    margin-left: 5px;
+    color: #512a00;
+}
+
+.adventure-dice{
+    font-size: 20px;
+}

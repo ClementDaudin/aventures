@@ -12,7 +12,6 @@ export default class aventuresItemSheet extends ItemSheet{
             secrets: this.document.isOwner,
             async: true
         });
-        console.log(data);
         return data;
     }
 

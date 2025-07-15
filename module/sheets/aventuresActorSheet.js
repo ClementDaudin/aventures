@@ -40,6 +40,9 @@ export default class aventuresActorSheet extends ActorSheet {
             sessionStorage.removeItem("launchFoundry");
         }
         this.data.weapons = this.actor.items.filter(i => i.type === "Arme");
+        this.data.adventureDiceSetting = game.settings.get("aventures", "adventureDice") || 0;
+        this.data.misadventureDiceSetting = game.settings.get("aventures", "misadventureDice") || 0;
+
 
         console.log(this.data);
         return this.data;
@@ -48,6 +51,14 @@ export default class aventuresActorSheet extends ActorSheet {
     activateListeners(html) {
         this.currentHtml = html;
         super.activateListeners(html);
+
+        this._onSettingChange = (settingName, value) => {
+            if (settingName.key === "aventures.misadventureDice") {
+                this.render();  // Re-rend la fiche pour mettre à jour l'affichage
+            }
+        };
+
+        Hooks.on("updateSetting", this._onSettingChange);
 
         const el = html[0].closest(".app");
 
@@ -161,24 +172,6 @@ export default class aventuresActorSheet extends ActorSheet {
             const rollCategory = ev.currentTarget.dataset.type;
             const diceTitle = ev.currentTarget.dataset.title;
 
-            if(rollCategory === "adventure"){
-                const roll = new Roll("1d6");
-                this.generateRollMessage({
-                    roll,
-                    diceTitle: diceTitle,
-                    isAdventure: 1,
-                });
-                return;
-            }
-            if(rollCategory === "misadventure"){
-                const roll = new Roll("1d6");
-                this.generateRollMessage({
-                    roll,
-                    diceTitle: diceTitle,
-                    isAdventure: 2,
-                });
-                return;
-            }
             if(rollCategory === "weapons"){
                 const weaponType = ev.currentTarget.dataset.damagetype;
                 const roll = new Roll(formula);
@@ -395,7 +388,7 @@ export default class aventuresActorSheet extends ActorSheet {
         }).render(true);
     }
 
-    generateRollMessage({ roll, diceTitle, diceStat = null, min = null, max = null, weaponType = null, isDamage = false, isAdventure = null }) {
+    generateRollMessage({ roll, diceTitle, diceStat = null, min = null, max = null, weaponType = null, isDamage = false}) {
         roll.roll({ async: true }).then(r => {
             const result = r.total;
             const playerColor = game.user.color;
@@ -403,49 +396,23 @@ export default class aventuresActorSheet extends ActorSheet {
 
             let color = "#3e2d17";
             let rightOffset = diceStat < 10 ? "18px" : "12px";
-            const adventureIndex = Math.ceil(result / 2);
-            let adventureClass = "mésaventure";
-            if(!isAdventure){
-                if (!isDamage && max !== null) {
-                    const seuilVert = Math.max(1 / max, Math.ceil(0.05 * max));
-                    const seuilRouge = Math.min(max, 95);
-                    if (result <= seuilVert) color = "green";
-                    else if (result >= seuilRouge) color = "red";
-                }else{
-                    if (result <= min) color = "red";
-                    else if (result >= max) color = "green";
-                }
+            if (!isDamage && max !== null) {
+                const seuilVert = Math.max(1 / max, Math.ceil(0.05 * max));
+                const seuilRouge = Math.min(max, 95);
+                if (result <= seuilVert) color = "green";
+                else if (result >= seuilRouge) color = "red";
             }else{
-                let adventureDice = this.data.systemData.dice.adventure;
-                let misadventureDice = this.data.systemData.dice.misadventure;
-
-                if (isAdventure === 1 && adventureDice > 0){
-                    adventureClass = "aventure";
-                    adventureDice--;
-                    misadventureDice++
-                }
-                else if (isAdventure === 2 && misadventureDice > 0){
-                    adventureClass = "mésaventure";
-                    misadventureDice--;
-                    adventureDice++
-                }
-                else{
-                    ui.notifications.error(`Tu n'as plus assez de dés ${isAdventure === 1 ? "d'aventure" : "de mésaventure"}`);
-                    return;
-                }
-                this.actor.update({
-                    "system.dice.adventure": adventureDice,
-                    "system.dice.misadventure": misadventureDice
-                })
+                if (result <= min) color = "red";
+                else if (result >= max) color = "green";
             }
 
             // Choix de l'image de fond
-            const backgroundImage = isDamage || isAdventure
+            const backgroundImage = isDamage
                 ? "/systems/aventures/assets/roll-damage.png"
                 : "/systems/aventures/assets/roll-card-aventure.png";
 
             // Partie haute
-            const titleBlock = isDamage || isAdventure
+            const titleBlock = isDamage
                 ? (weaponType
                         ? `
         <div style="font-weight: 700; font-size: 2.2em; margin-bottom: 4px; word-break: break-word; white-space: normal;">
@@ -455,7 +422,7 @@ export default class aventuresActorSheet extends ActorSheet {
             </div>
         </div>`
                         : `
-        <div style="font-weight: 700; font-size: ${isAdventure ? "1.4em" : "2.0em"}; margin: 4px 35px; word-break: break-word; white-space: normal;">
+        <div style="font-weight: 700; font-size: 2.0em; margin: 4px 35px; word-break: break-word; white-space: normal;">
   ${diceTitle}
 </div>`
                 )
@@ -470,15 +437,7 @@ export default class aventuresActorSheet extends ActorSheet {
     <div style="font-size: 4em; font-weight: 900; letter-spacing: 0.15em; color: ${color};">
       ${result}
     </div>`
-                : isAdventure
-                    ? `
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; font-family: 'Obra Letra', sans-serif; font-size: 1.2em; margin-top: 8px;">
-                      <div>Jet</div><div class="adventure-result">${result}</div>
-                      <div>1-2</div><div class="adventure-result ${adventureIndex === 1 ? adventureClass : ''}">Déplacement</div>
-                      <div>3-4</div><div class="adventure-result ${adventureIndex === 2 ? adventureClass : ''}">Posture</div>
-                      <div>5-6</div><div class="adventure-result ${adventureIndex === 3 ? adventureClass : ''}">In extremis</div>
-                    </div>` 
-                    : `
+                : `
                     <div style="font-size: 4em; font-weight: 900; letter-spacing: 0.15em; color: ${color};">
                       ${result}
                     </div>
