@@ -40,8 +40,10 @@ export default class aventuresActorSheet extends ActorSheet {
             sessionStorage.removeItem("launchFoundry");
         }
         this.data.weapons = this.actor.items.filter(i => i.type === "Arme");
-        this.data.adventureDiceSetting = game.settings.get("aventures", "adventureDice") || 0;
-        this.data.misadventureDiceSetting = game.settings.get("aventures", "misadventureDice") || 0;
+        const currentFolderId = game.settings.get("aventures", "folderId")
+        const folder = game.folders.get(currentFolderId);
+        this.data.adventureDiceSetting = folder?.getFlag("aventures", "adventureDice") || 0;
+        this.data.misadventureDiceSetting = folder?.getFlag("aventures", "misadventureDice") || 0;
 
 
         console.log(this.data);
@@ -54,7 +56,7 @@ export default class aventuresActorSheet extends ActorSheet {
 
         this._onSettingChange = (settingName, value) => {
             if (settingName.key === "aventures.misadventureDice") {
-                this.render();  // Re-rend la fiche pour mettre à jour l'affichage
+                this.render();
             }
         };
 
@@ -124,7 +126,8 @@ export default class aventuresActorSheet extends ActorSheet {
         html.find(".item-delete").click(async ev => {
             const key = ev.currentTarget.dataset.key;
             const parameter = ev.currentTarget.dataset.parameter;
-            if(parameter === "Arme"){
+            if(parameter === "weapon"){
+
                 await this.actor.deleteEmbeddedDocuments("Item", [key]);
                 return;
             }

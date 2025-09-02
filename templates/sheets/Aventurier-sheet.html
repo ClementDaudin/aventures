@@ -268,7 +268,7 @@
                             +
                             <input class="weapon-bonus" type="number" data-item-id="{{weapon._id}}" value="{{weapon.system.bonus}}" placeholder="0">
                             {{#if @root.systemData.updateWeaponsMode}}
-                            <button class="item-delete" title="Supprimer la compétence" data-key="{{weapon._id}}" data-parameter="weapon"><i class="fas fa-trash"></i></button>
+                            <button class="item-delete" title="Supprimer l'arme'" data-key="{{weapon._id}}" data-parameter="weapon"><i class="fas fa-trash"></i></button>
                             {{else}}
                             <button class="roll-dice roll-knowledges-equipment" data-title="{{weapon.name}}" data-damagetype="{{weapon.system.type}}" data-attribute="roll-weapons-damage" data-dice="{{weapon.system.dice_quantity}}{{weapon.system.dice_number}}{{#if weapon.system.bonus}}{{#unless (eq weapon.system.bonus 0)}}+{{weapon.system.bonus}}{{/unless}}{{/if}}" data-type="weapons"><img src="systems/aventures/assets/dice.png"></button>
                             {{/if}}

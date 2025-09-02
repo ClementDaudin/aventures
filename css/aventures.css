@@ -507,3 +507,35 @@ textarea{
 .adventure-dice{
     font-size: 20px;
 }
+
+.adventure-select-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 15em;
+    font-family: 'Georgia', serif;
+}
+
+#adventures-folder, #aventures-folder {
+    font-family: 'Georgia', serif;
+    font-weight: bold;
+    font-size: 1.1em;
+    border: 2px solid #7b4a0e;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #f7e6aa, #d29900);
+    color: #3d2200;
+    cursor: pointer;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+#adventures-folder:hover,
+#aventures-folder:hover{
+    background: linear-gradient(135deg, #f7e6aa, #d29900);
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4);
+}
+

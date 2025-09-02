@@ -45,60 +45,88 @@ Hooks.once("init", () => {
         }
     );
 
-    game.settings.register("aventures", "adventureDice", {
-        name: "Dés d'Aventure",
+    game.settings.register("aventures", "folderId", {
+        name: "Identifiant du groupe",
         scope: "world",
         config: false,
-        type: Number,
-        default: 2,
+        type: String,
+        default: "",
         onChange: value => {
+            const folder = game.folders.get(value);
             const adventureRoll = document.getElementById("adventure-roll");
             const misadventureRoll = document.getElementById("misadventure-roll");
-            adventureRoll.disabled = (value <= 0);
-            misadventureRoll.disabled = (value >= 4);
-            document.getElementById("adventure-count").textContent = value;
-            document.getElementById("misadventure-count").textContent = 4-value;
+            if(!folder){return}
+            if(!folder.getFlag("aventures", "adventureDice") && !folder.getFlag("aventures", "misadventureDice")){
+                folder.setFlag("aventures", "adventureDice", 2);
+                folder.setFlag("aventures", "misadventureDice", 2);
+                document.getElementById("adventure-count").textContent = 2;
+                document.getElementById("misadventure-count").textContent = 2;
+                adventureRoll.disabled = false;
+                misadventureRoll.disabled = false;
+            }else{
+
+                let adventureDice = folder.getFlag("aventures", "adventureDice")
+                let misadventureDice = folder.getFlag("aventures", "misadventureDice")
+                adventureRoll.disabled = (adventureDice <= 0);
+                misadventureRoll.disabled = (misadventureDice <= 0);
+
+                document.getElementById("adventure-count").textContent = adventureDice;
+                document.getElementById("misadventure-count").textContent = misadventureDice;
+            }
         }
     });
-
-    game.settings.register("aventures", "misadventureDice", {
-        name: "Dés de mésaventure",
-        scope: "world",
-        config: false,
-        type: Number,
-        default: 2,
-        onChange: value => {
-            const adventureRoll = document.getElementById("adventure-roll");
-            const misadventureRoll = document.getElementById("misadventure-roll");
-            adventureRoll.disabled =(value >= 4);
-            misadventureRoll.disabled = (value <= 0);
-
-            document.getElementById("adventure-count").textContent = 4-value;
-            document.getElementById("misadventure-count").textContent = value;
-        }
-    });
-
 })
 
+let socket;
+
+async function sendAdventureRoll(isAdventure) {
+    const folderId = game.settings.get("aventures", "folderId");
+    const folder = game.folders.get(folderId);
+    if (!folder) return ui.notifications.warn("Folder not found");
+
+    let adventureDice = await folder.getFlag("aventures", "adventureDice");
+    let misadventureDice = await folder.getFlag("aventures", "misadventureDice");
+
+    rollAdventureDice(adventureDice, misadventureDice, isAdventure);
+}
+Hooks.once("socketlib.ready", () => {
+    socket = socketlib.registerSystem("aventures");
+    socket.register("sendAdventureRoll", sendAdventureRoll);
+});
 Hooks.on("ready", async () => {
-    game.socket.on("system.aventures", (data) => {
-        if (!game.user.isGM) return;
-
-        if (data.action === "updateDice") {
-            let adventureDice = game.settings.get("aventures", "adventureDice");
-            let misadventureDice = game.settings.get("aventures", "misadventureDice") || 0;
-
-            rollAdventureDice(adventureDice, misadventureDice, data.isAdventure);
-        }
-    });
-
     if (document.getElementById("aventures-roller")) return;
 
     const btn = document.createElement("div");
-    let adventureDice = game.settings.get("aventures", "adventureDice") || 0;
-    let misadventureDice = game.settings.get("aventures", "misadventureDice") || 0;
+    let currentFolderId = game.settings.get("aventures", "folderId");
+    if(!game.folders.get(currentFolderId)){
+        const folders = game.folders.filter(f => f.type === "Actor");
+        currentFolderId = folders[0]?.id;
+        game.settings.set("aventures", "folderId", currentFolderId);
+    }
+    const folder = game.folders.get(currentFolderId);
+    let adventureDice = folder?.getFlag("aventures", "adventureDice");
+    let misadventureDice =folder?.getFlag("aventures", "misadventureDice");
     btn.id = "aventures-roller";
+    let folderSelect = "";
+    if (game.user.isGM) {
+        const folders = game.folders.filter(f => f.type === "Actor");
+        const savedFolderId = game.settings.get("aventures", "folderId") || folders[0]?.id;
+
+        folderSelect = `
+         <div class="adventure-select-wrapper">
+          <select id="aventures-folder">
+            ${folders.map(f => `
+              <option value="${f.id}" ${f.id === savedFolderId ? "selected" : ""}>
+                Équipe : ${f.name}
+              </option>
+            `).join("")}
+          </select>
+        </div>
+
+        `;
+    }
     btn.innerHTML = `
+        ${folderSelect}
         <button id="adventure-roll" class="adventure-button" ${adventureDice === 0 ? "disabled" : ""}>
           Dés d'Aventure (<span id="adventure-count">${adventureDice}</span>)
         </button>
@@ -108,26 +136,23 @@ Hooks.on("ready", async () => {
         </button>
   `;
     document.body.appendChild(btn);
+
+    if (game.user.isGM){
+        const select = document.getElementById("aventures-folder");
+        select.addEventListener("change", async ev => {
+            await game.settings.set("aventures", "folderId", ev.target.value);
+        });
+    }
+
     document.getElementById("adventure-roll").addEventListener("click", () => {
-        if (!game.user.isGM){
-            game.socket.emit("system.aventures", { action: "updateDice", isAdventure: true });
-            return;
-        }
-        adventureDice = game.settings.get("aventures", "adventureDice") || 0;
-        misadventureDice = game.settings.get("aventures", "misadventureDice") || 0
-        rollAdventureDice(adventureDice, misadventureDice, true);
+        socket.executeAsGM("sendAdventureRoll", true);
 
     });
     document.getElementById("misadventure-roll").addEventListener("click", () => {
-        adventureDice = game.settings.get("aventures", "adventureDice") || 0;
-        misadventureDice = game.settings.get("aventures", "misadventureDice") || 0
-        if (!game.user.isGM){
-            game.socket.emit("system.aventures", { action: "updateDice", isAdventure: false });
-            return;
-        }
-        rollAdventureDice(adventureDice, misadventureDice, false);
+        socket.executeAsGM("sendAdventureRoll", false);
     });
 });
+
 
 Hooks.on("createToken", async (tokenDoc, options, userId) => {
     const token = tokenDoc.object;
@@ -149,6 +174,70 @@ Hooks.on("createToken", async (tokenDoc, options, userId) => {
     }
 });
 
+Hooks.on("createFolder", (folder, options, userId) => {
+
+    if(folder.type !== "Actor"){
+        return;
+    }
+    if(!game.settings.get("aventures", "folderId")){
+        console.log("NO SETTINGS")
+        game.settings.set("aventures", "folderId", folder.id);
+    }
+
+    const select = document.getElementById("aventures-folder");
+    if (!select) return;
+
+    // Crée un nouvel élément <option>
+    const option = document.createElement("option");
+    option.value = folder.id;
+    option.textContent = `Équipe : ${folder.name}`;
+
+    // L'ajoute au <select>
+    select.appendChild(option);
+
+})
+
+Hooks.on("updateFolder", (folder, changes, options, userId) => {
+    if (folder.id !== game.settings.get("aventures", "folderId")) return;
+    const adventureRoll = document.getElementById("adventure-roll");
+    const misadventureRoll = document.getElementById("misadventure-roll");
+    let adventureDice = folder.getFlag("aventures", "adventureDice")
+    let misadventureDice = folder.getFlag("aventures", "misadventureDice")
+    adventureRoll.disabled = (adventureDice <= 0);
+    misadventureRoll.disabled = (misadventureDice <= 0);
+
+    document.getElementById("adventure-count").textContent = adventureDice;
+    document.getElementById("misadventure-count").textContent = misadventureDice;
+    for (let appId in ui.windows) {
+        const app = ui.windows[appId];
+        if (app.actor?.type === "Aventurier") {
+            app.render(false);
+        }
+    }
+});
+Hooks.on("deleteFolder", (folder, options, userId) => {
+    if (folder.type !== "Actor") return;
+
+    // Trouve le <select> par son ID
+    const select = document.getElementById("aventures-folder");
+    if (!select) return;
+
+    // Trouve l’option correspondante dans le <select>
+    const optionToRemove = select.querySelector(`option[value="${folder.id}"]`);
+    if (optionToRemove) {
+        optionToRemove.remove();
+    }
+});
+Hooks.on("updateSetting", (setting) => {
+    if (setting.key !== "aventures.folderId") return;
+
+    for (let appId in ui.windows) {
+        const app = ui.windows[appId];
+        if (app.actor?.type === "Aventurier") {
+            app.render(false);
+        }
+    }
+});
 
 Handlebars.registerHelper('add', function(a, b) {
     return Number(a) + Number(b);
@@ -166,9 +255,21 @@ function rollAdventureDice(adventureDice, misadventureDice, isAdventure) {
         adventureDice++;
         misadventureDice--;
     }
-    game.settings.set("aventures", "adventureDice", adventureDice);
-    game.settings.set("aventures", "misadventureDice", misadventureDice);
+    const folderId = game.settings.get("aventures", "folderId")
+    const folder = game.folders.get(folderId)
+    folder.setFlag("aventures", "adventureDice", adventureDice);
+    folder.setFlag("aventures", "misadventureDice", misadventureDice);
+    updateShownDice(adventureDice, misadventureDice);
     rollAdventure(isAdventure);
+}
+
+function updateShownDice(adventureDice, misadventureDice) {
+    const adventureRoll = document.getElementById("adventure-roll");
+    const misadventureRoll = document.getElementById("misadventure-roll");
+    adventureRoll.disabled = (adventureDice <= 0);
+    misadventureRoll.disabled = (misadventureDice <= 0);
+    document.getElementById("adventure-count").textContent = adventureDice;
+    document.getElementById("misadventure-count").textContent = misadventureDice;
 }
 
 function rollAdventure(isAdventure) {
