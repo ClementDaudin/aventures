@@ -356,11 +356,14 @@ export default class aventuresActorSheet extends ActorSheet {
                     label: "Lancer",
                     callback: html => {
                         let formula = diceToRoll;
-                        const modifier = parseInt(html.find('[name="modifier"]').val()) || 0;
+                        let modifier = parseInt(html.find('[name="modifier"]').val()) || 0;
                         if(isDamage){
                             formula+=`+${modifier}`;
                         }
                         else{
+                            if(this.data.systemData.basic_posture === "focus"){
+                                modifier += 5;
+                            }
                             diceStat = Math.min( Number(diceStat) + modifier, 95);
                         }
                         max = isDamage ? max + modifier : 100;
@@ -400,8 +403,14 @@ export default class aventuresActorSheet extends ActorSheet {
             let color = "#3e2d17";
             let rightOffset = diceStat < 10 ? "18px" : "12px";
             if (!isDamage && max !== null) {
-                const seuilVert = Math.max(1 / max, Math.ceil(0.05 * max));
-                const seuilRouge = Math.min(max, 95);
+                let minCritique = 0.05;
+                let maxCritique = 96;
+                if(this.data.systemData.basic_posture === "offensif") {
+                    minCritique = 0.1;
+                }
+                //TODO marche pas si d20
+                const seuilVert = Math.max(1 / max, Math.ceil(minCritique * max));
+                const seuilRouge = Math.min(max, maxCritique);
                 if (result <= seuilVert) color = "green";
                 else if (result >= seuilRouge) color = "red";
             }else{
