@@ -155,6 +155,8 @@ Hooks.on("ready", async () => {
 
 
 Hooks.on("createToken", async (tokenDoc, options, userId) => {
+    if (game.user.id !== userId && !game.user.isGM) return;
+
     const token = tokenDoc.object;
     if (token.actor.data.data.dice.advantage) {
         await token.toggleEffect("systems/aventures/assets/icons/advantage.png", { active: true });
