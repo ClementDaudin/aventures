@@ -408,8 +408,6 @@ export default class aventuresActorSheet extends ActorSheet {
                 if(this.data.systemData.basic_posture === "offensif" && max === 100) {
                     minCritique = 0.1;
                 }
-                console.log(min, max)
-                //TODO marche pas si d20
                 const seuilVert = Math.max(1 / max, Math.ceil(minCritique * max));
                 const seuilRouge = Math.min(max, maxCritique);
                 if (result <= seuilVert) color = "green";
