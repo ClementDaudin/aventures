@@ -399,6 +399,10 @@ export default class aventuresActorSheet extends ActorSheet {
             const result = r.total;
             const playerColor = game.user.color;
             const tokenImg = this.actor.token?.texture?.src ?? this.actor.img ?? "icons/svg/mystery-man.svg";
+            const critical_success = "green";
+            const critical_failure = "red";
+            const success = "#023602";
+            const failure = "#450101";
 
             let color = "#3e2d17";
             let rightOffset = diceStat < 10 ? "18px" : "12px";
@@ -410,11 +414,13 @@ export default class aventuresActorSheet extends ActorSheet {
                 }
                 const seuilVert = Math.max(1 / max, Math.ceil(minCritique * max));
                 const seuilRouge = Math.min(max, maxCritique);
-                if (result <= seuilVert) color = "green";
-                else if (result >= seuilRouge) color = "red";
+                if (result <= seuilVert) color = critical_success;
+                else if (result >= seuilRouge) color = critical_failure;
+                else if(diceStat && result <= diceStat) color = success;
+                else if (diceStat && result >= diceStat) color = failure;
             }else{
-                if (result <= min) color = "red";
-                else if (result >= max) color = "green";
+                if (result <= min) color = critical_failure;
+                else if (result >= max) color = critical_success;
             }
 
             // Choix de l'image de fond
