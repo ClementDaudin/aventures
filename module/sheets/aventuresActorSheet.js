@@ -361,7 +361,7 @@ export default class aventuresActorSheet extends ActorSheet {
                             formula+=`+${modifier}`;
                         }
                         else{
-                            if(this.data.systemData.basic_posture === "focus"){
+                            if(this.data.systemData.basic_posture === "focus" && !hideDieSelect){
                                 modifier += 5;
                             }
                             diceStat = Math.min( Number(diceStat) + modifier, 95);
